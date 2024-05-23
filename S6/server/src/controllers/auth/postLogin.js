@@ -11,7 +11,7 @@ export const postLogin = async (req, res) => {
     });
 
     if (user && (await bcrypt.compare(password, user.password))) {
-      //jwt token
+      // create jwt token
       const token = jwt.sign(
         //podatki o uporabniku ki jih zelimo enkriptat z JWT token
         {
@@ -20,12 +20,13 @@ export const postLogin = async (req, res) => {
         },
         //secret
         process.env.TOKEN_KEY,
+        
         {
           expiresIn: "8h",
         }
       );
 
-      //poslji response uporabniku
+      //poslji response userju
       return res.status(200).json({
         userDetails: {
           email: user.email,
