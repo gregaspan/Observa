@@ -1,22 +1,20 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthPage } from "./AuthPage";
 import { DashboardPage } from "./DashboardPage";
 import { App } from "./App";
 
 import "./index.css";
 
-const router = createBrowserRouter([
-  { path: "/auth", element: <AuthPage /> },
-  { path: "/", element: <DashboardPage /> },
-]);
-
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
+  <BrowserRouter>
     <App>
-      <RouterProvider router={router} />
+      <Routes>
+        <Route path="/auth" element={<AuthPage />} />
+        <Route path="/*" element={<DashboardPage />} />
+      </Routes>
     </App>
-  </React.StrictMode>
+  </BrowserRouter>
 );
