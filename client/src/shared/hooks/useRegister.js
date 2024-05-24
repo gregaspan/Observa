@@ -30,7 +30,7 @@ export const useRegister = () => {
 
     localStorage.setItem("user", JSON.stringify(userDetails));
 
-    navigate("/");
+    navigate("/channels");
   };
 
   return {
