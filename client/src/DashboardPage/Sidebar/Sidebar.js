@@ -25,8 +25,8 @@ export const Sidebar = ({ channels }) => {
 
   return (
     <div className="sidebar-container">
-      <span className="sidebar-title">For you</span>
-      <span className="sidebar-subtitle">FOLLOWED CHANNELS</span>
+      <span className="sidebar-title">Notifications</span>
+      <span className="sidebar-subtitle">Your Cameras</span>
       {channels.map((channel) => {
         return (
           <div key={channel.id} className="sidebar-list-item">
@@ -37,7 +37,7 @@ export const Sidebar = ({ channels }) => {
                 color: channel.isOnline ? "green" : "red",
               }}
             >
-              {channel.isOnline ? "Online" : "Offline"}
+              {channel.isOnline ? "On" : "Off"}
             </span>
           </div>
         );

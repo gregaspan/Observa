@@ -44,13 +44,13 @@ export const Nav = () => {
     <div className="nav-container">
       <NavLogo />
       <div className="nav-buttons-container">
-        <NavButton text="Browse" onClickHandler={handleNavigateToChannels} />
+        <NavButton text="Observa" onClickHandler={handleNavigateToChannels} />
         {!isLogged ? (
           <NavButton text="Login" onClickHandler={handleNavigateToAuth} />
         ) : (
           <div>
             <NavButton
-              text="My Account"
+              text="Profile"
               onClickHandler={handleNavigateToSettings}
             />
             <NavButton text="Logout" onClickHandler={handleLogout} />
