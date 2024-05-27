@@ -1,3 +1,5 @@
+import React, { useEffect } from 'react';
+
 import { Fragment, useState } from 'react';
 import { Dialog, Menu, Transition } from '@headlessui/react';
 import {
@@ -81,6 +83,31 @@ export default function Example() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [selectedNav, setSelectedNav] = useState(navigation[0]);
 
+  const [teams, setTeams] = useState([]);
+
+  useEffect(() => {
+    // Function to fetch data from the API
+    const fetchData = async () => {
+      try {
+        const response = await fetch('http://127.0.0.1:6969/api/cameras');
+        const data = await response.json();
+        // Transform the data
+        const transformedData = data.map((item, index) => ({
+          id: index + 1,
+          name: item.name,
+          href: item.address,
+          initial: item.name.charAt(0), // First letter of the name
+          current: false
+        }));
+        // Update the state
+        setTeams(transformedData);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
   const handleNavClick = (navItem) => {
     setSelectedNav(navItem);
   };
@@ -247,7 +274,7 @@ export default function Example() {
                   </ul>
                 </li>
                 <li>
-                  <div className="text-xs font-semibold leading-6 text-indigo-200">Your teams</div>
+                  <div className="text-xs font-semibold leading-6 text-indigo-200">Your Cameras</div>
                   <ul role="list" className="-mx-2 mt-2 space-y-1">
                     {teams.map((team) => (
                       <li key={team.name}>
