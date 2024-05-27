@@ -1,88 +1,95 @@
-/*
-  This example requires some changes to your config:
-  
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    plugins: [
-      // ...
-      require('@tailwindcss/forms'),
-    ],
-  }
-  ```
-*/
-import { Fragment, useState } from 'react'
-import { Dialog, Menu, Transition } from '@headlessui/react'
+import { Fragment, useState } from 'react';
+import { Dialog, Menu, Transition } from '@headlessui/react';
 import {
   Bars3Icon,
   BellIcon,
-  CalendarIcon,
-  ChartPieIcon,
   Cog6ToothIcon,
-  DocumentDuplicateIcon,
-  FolderIcon,
-  HomeIcon,
-  UsersIcon,
   XMarkIcon,
-  DevicePhoneMobileIcon,
-  VideoCameraIcon,
-  PlayCircleIcon,
+  HomeIcon,
+  ChartBarIcon,
   EyeIcon,
   UserCircleIcon,
-  EnvelopeIcon,
+  PlayCircleIcon,
   ShareIcon,
-  DeviceTabletIcon,
-  CameraIcon,
-  ClockIcon,
-  ChartBarIcon,
+  EnvelopeIcon,
   BookOpenIcon,
-} from '@heroicons/react/24/outline'
-import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid'
+} from '@heroicons/react/24/outline';
+import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid';
 
 import CamerasGrid from './CamerasGrid';
 
+// Components for each navigation item
+function Dashboard() {
+  return <>
+  <div>Dashboard Content</div>
+  <CamerasGrid />
+  </>
+}
 
+function Reports() {
+  return <div>Reports Content</div>;
+}
 
+function MotionDetection() {
+  return <div>Motion Detection Content</div>;
+}
 
+function FacialRecognition() {
+  return <div>Facial Recognition Content</div>;
+}
+
+function VideoPlayback() {
+  return <div>Video Playback Content</div>;
+}
+
+function VideoSharing() {
+  return <div>Video Sharing Content</div>;
+}
+
+function EmailNotifications() {
+  return <div>Email Notifications Content</div>;
+}
+
+function Documentation() {
+  return <div>Documentation Content</div>;
+}
 
 const navigation = [
-  { name: 'Dashboard', href: '#remote-access', icon: HomeIcon, current: true },
-  { name: 'Reports', href: '#reports', icon: ChartBarIcon, current: false },
-  { name: 'Motion Detection', href: '#motion-detection', icon: EyeIcon, current: false },
-  { name: 'Facial Recognition', href: '#facial-recognition', icon: UserCircleIcon, current: false },
-  { name: 'Video Playback', href: '#video-playback', icon: PlayCircleIcon, current: false },
-  { name: 'Video Sharing', href: '#video-sharing', icon: ShareIcon, current: false },
-  { name: 'Email Notifications', href: '#email-notifications', icon: EnvelopeIcon, current: false },
-  { name: 'Documentation', href: '#documentation', icon: BookOpenIcon, current: false },
-]
+  { name: 'Dashboard', component: Dashboard, icon: HomeIcon },
+  { name: 'Reports', component: Reports, icon: ChartBarIcon },
+  { name: 'Motion Detection', component: MotionDetection, icon: EyeIcon },
+  { name: 'Facial Recognition', component: FacialRecognition, icon: UserCircleIcon },
+  { name: 'Video Playback', component: VideoPlayback, icon: PlayCircleIcon },
+  { name: 'Video Sharing', component: VideoSharing, icon: ShareIcon },
+  { name: 'Email Notifications', component: EmailNotifications, icon: EnvelopeIcon },
+  { name: 'Documentation', component: Documentation, icon: BookOpenIcon },
+];
+
 const teams = [
   { id: 1, name: 'Heroicons', href: '#', initial: 'H', current: false },
   { id: 2, name: 'Tailwind Labs', href: '#', initial: 'T', current: false },
   { id: 3, name: 'Workcation', href: '#', initial: 'W', current: false },
-]
+];
+
 const userNavigation = [
   { name: 'Your profile', href: '#' },
   { name: 'Sign out', href: '#' },
-]
+];
 
 function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
+  return classes.filter(Boolean).join(' ');
 }
 
 export default function Example() {
-  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [selectedNav, setSelectedNav] = useState(navigation[0]);
+
+  const handleNavClick = (navItem) => {
+    setSelectedNav(navItem);
+  };
 
   return (
     <>
-      {/*
-        This example requires updating your template:
-
-        ```
-        <html class="h-full bg-white">
-        <body class="h-full">
-        ```
-      */}
       <div>
         <Transition.Root show={sidebarOpen} as={Fragment}>
           <Dialog as="div" className="relative z-50 lg:hidden" onClose={setSidebarOpen}>
@@ -125,7 +132,6 @@ export default function Example() {
                       </button>
                     </div>
                   </Transition.Child>
-                  {/* Sidebar component, swap this element with another sidebar if you like */}
                   <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-indigo-600 px-6 pb-4">
                     <div className="flex h-16 shrink-0 items-center">
                       <img
@@ -140,24 +146,24 @@ export default function Example() {
                           <ul role="list" className="-mx-2 space-y-1">
                             {navigation.map((item) => (
                               <li key={item.name}>
-                                <a
-                                  href={item.href}
+                                <button
+                                  onClick={() => handleNavClick(item)}
                                   className={classNames(
-                                    item.current
+                                    selectedNav.name === item.name
                                       ? 'bg-indigo-700 text-white'
                                       : 'text-indigo-200 hover:text-white hover:bg-indigo-700',
-                                    'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
+                                    'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold w-full text-left'
                                   )}
                                 >
                                   <item.icon
                                     className={classNames(
-                                      item.current ? 'text-white' : 'text-indigo-200 group-hover:text-white',
+                                      selectedNav.name === item.name ? 'text-white' : 'text-indigo-200 group-hover:text-white',
                                       'h-6 w-6 shrink-0'
                                     )}
                                     aria-hidden="true"
                                   />
                                   {item.name}
-                                </a>
+                                </button>
                               </li>
                             ))}
                           </ul>
@@ -206,9 +212,7 @@ export default function Example() {
           </Dialog>
         </Transition.Root>
 
-        {/* Static sidebar for desktop */}
         <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
-          {/* Sidebar component, swap this element with another sidebar if you like */}
           <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-indigo-600 px-6 pb-4">
             <div className="flex h-16 shrink-0 items-center">
               <img
@@ -223,24 +227,24 @@ export default function Example() {
                   <ul role="list" className="-mx-2 space-y-1">
                     {navigation.map((item) => (
                       <li key={item.name}>
-                        <a
-                          href={item.href}
+                        <button
+                          onClick={() => handleNavClick(item)}
                           className={classNames(
-                            item.current
+                            selectedNav.name === item.name
                               ? 'bg-indigo-700 text-white'
                               : 'text-indigo-200 hover:text-white hover:bg-indigo-700',
-                            'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
+                            'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold w-full text-left'
                           )}
                         >
                           <item.icon
                             className={classNames(
-                              item.current ? 'text-white' : 'text-indigo-200 group-hover:text-white',
+                              selectedNav.name === item.name ? 'text-white' : 'text-indigo-200 group-hover:text-white',
                               'h-6 w-6 shrink-0'
                             )}
                             aria-hidden="true"
                           />
                           {item.name}
-                        </a>
+                        </button>
                       </li>
                     ))}
                   </ul>
@@ -292,7 +296,6 @@ export default function Example() {
               <Bars3Icon className="h-6 w-6" aria-hidden="true" />
             </button>
 
-            {/* Separator */}
             <div className="h-6 w-px bg-gray-900/10 lg:hidden" aria-hidden="true" />
 
             <div className="flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
@@ -318,10 +321,8 @@ export default function Example() {
                   <BellIcon className="h-6 w-6" aria-hidden="true" />
                 </button>
 
-                {/* Separator */}
                 <div className="hidden lg:block lg:h-6 lg:w-px lg:bg-gray-900/10" aria-hidden="true" />
 
-                {/* Profile dropdown */}
                 <Menu as="div" className="relative">
                   <Menu.Button className="-m-1.5 flex items-center p-1.5">
                     <span className="sr-only">Open user menu</span>
@@ -370,12 +371,12 @@ export default function Example() {
           </div>
 
           <main className="py-10">
-            <div className="px-4 sm:px-6 lg:px-8">{/* Your content */}</div>
-            <CamerasGrid />
-            
+            <div className="px-4 sm:px-6 lg:px-8">
+              <selectedNav.component />
+            </div>
           </main>
         </div>
       </div>
     </>
-  )
+  );
 }
