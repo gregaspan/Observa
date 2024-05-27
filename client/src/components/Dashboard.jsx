@@ -20,10 +20,7 @@ import CamerasGrid from './CamerasGrid';
 
 // Components for each navigation item
 function Dashboard() {
-  return <>
-  <div>Dashboard Content</div>
-  <CamerasGrid />
-  </>
+  return <CamerasGrid />;
 }
 
 function Reports() {
