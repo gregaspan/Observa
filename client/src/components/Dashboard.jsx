@@ -25,6 +25,18 @@ import {
   HomeIcon,
   UsersIcon,
   XMarkIcon,
+  DevicePhoneMobileIcon,
+  VideoCameraIcon,
+  PlayCircleIcon,
+  EyeIcon,
+  UserCircleIcon,
+  EnvelopeIcon,
+  ShareIcon,
+  DeviceTabletIcon,
+  CameraIcon,
+  ClockIcon,
+  ChartBarIcon,
+  BookOpenIcon,
 } from '@heroicons/react/24/outline'
 import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 
@@ -35,12 +47,14 @@ import CamerasGrid from './CamerasGrid';
 
 
 const navigation = [
-  { name: 'Dashboard', href: '#', icon: HomeIcon, current: true },
-  { name: 'Team', href: '#', icon: UsersIcon, current: false },
-  { name: 'Projects', href: '#', icon: FolderIcon, current: false },
-  { name: 'Calendar', href: '#', icon: CalendarIcon, current: false },
-  { name: 'Documents', href: '#', icon: DocumentDuplicateIcon, current: false },
-  { name: 'Reports', href: '#', icon: ChartPieIcon, current: false },
+  { name: 'Dashboard', href: '#remote-access', icon: HomeIcon, current: true },
+  { name: 'Reports', href: '#reports', icon: ChartBarIcon, current: false },
+  { name: 'Motion Detection', href: '#motion-detection', icon: EyeIcon, current: false },
+  { name: 'Facial Recognition', href: '#facial-recognition', icon: UserCircleIcon, current: false },
+  { name: 'Video Playback', href: '#video-playback', icon: PlayCircleIcon, current: false },
+  { name: 'Video Sharing', href: '#video-sharing', icon: ShareIcon, current: false },
+  { name: 'Email Notifications', href: '#email-notifications', icon: EnvelopeIcon, current: false },
+  { name: 'Documentation', href: '#documentation', icon: BookOpenIcon, current: false },
 ]
 const teams = [
   { id: 1, name: 'Heroicons', href: '#', initial: 'H', current: false },
@@ -358,6 +372,7 @@ export default function Example() {
           <main className="py-10">
             <div className="px-4 sm:px-6 lg:px-8">{/* Your content */}</div>
             <CamerasGrid />
+            
           </main>
         </div>
       </div>
