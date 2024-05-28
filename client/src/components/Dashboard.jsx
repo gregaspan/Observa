@@ -160,7 +160,7 @@ export default function Example() {
                     <div className="flex h-16 shrink-0 items-center">
                       <img
                         className="h-8 w-auto"
-                        src="https://tailwindui.com/img/logos/mark.svg?color=white"
+                        src="https://svgshare.com/i/16Te.svg"
                         alt="Your Company"
                       />
                     </div>
@@ -241,7 +241,7 @@ export default function Example() {
             <div className="flex h-16 shrink-0 items-center">
               <img
                 className="h-8 w-auto"
-                src="https://tailwindui.com/img/logos/mark.svg?color=white"
+                src="https://svgshare.com/i/16Te.svg"
                 alt="Your Company"
               />
             </div>
