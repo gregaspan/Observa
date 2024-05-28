@@ -136,5 +136,17 @@ def display_image(document_id):
 def test():
     return jsonify({"message": "Letsgo."})
 
+@app.route('/api/images', methods=['GET'])
+def get_all_images():
+    documents = faces_collection.find()
+    images = []
+    for document in documents:
+        images.append({
+            "id": str(document["_id"]),
+            "image_data": document["image_data"]
+        })
+    return jsonify(images)
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=6969, debug=True)
+

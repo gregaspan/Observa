@@ -1,0 +1,13 @@
+/* styles.css */
+.image-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  .image-item img {
+    width: 200px;
+    height: auto;
+    border: 1px solid #ccc;
+  }
+  
