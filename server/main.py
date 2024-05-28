@@ -3,23 +3,20 @@ import datetime
 from flask import Flask, Response, jsonify, request, send_file
 from flask_cors import CORS
 from pymongo import MongoClient
-from bson import ObjectId
 import base64
-from PIL import Image
 from io import BytesIO
+from PIL import Image
 
 app = Flask(__name__)
 CORS(app)
 
 video_captures = {}
-camera_addresses = ["https://164.8.113.80:8080/video"]
-
-face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
-body_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_fullbody.xml")
+camera_addresses = ["https://192.168.8.176:8080/video"]
 
 client = MongoClient('mongodb+srv://admin:adminadmin@cluster0.4v8pcrv.mongodb.net/main?retryWrites=true&w=majority&appName=Cluster0')
 db = client.video_surveillance
 faces_collection = db.detected_faces
+recordings_collection = db.recordings_collection  
 
 def init_video_captures():
     global video_captures
@@ -34,7 +31,6 @@ init_video_captures()
 def generate_frames(camera_address):
     global video_captures
     is_recording = False
-    video_writer = None
     recording_start_time = None
     SECONDS_TO_RECORD = 10  
     video_capture = video_captures[camera_address]["capture"]
@@ -45,42 +41,29 @@ def generate_frames(camera_address):
         if not success:
             break
         else:
-            current_datetime = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+            current_datetime = datetime.datetime.now()
 
             grayscale_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-            faces = face_cascade.detectMultiScale(grayscale_frame, 1.3, 5)
-            bodies = body_cascade.detectMultiScale(grayscale_frame, 1.3, 5)
 
-            for (x, y, w, h) in faces:
-                cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 2)
-                face_image = frame[y:y+h, x:x+w]
-                _, buffer = cv2.imencode('.jpg', face_image)
-                face_image_data = base64.b64encode(buffer).decode('utf-8')
-                faces_collection.insert_one({
-                    "timestamp": datetime.datetime.now(),
-                    "image_data": face_image_data
-                })
+            if not is_recording:
+                is_recording = True
+                recording_start_time = datetime.datetime.now()
 
-                if not is_recording:
-                    is_recording = True
-                    recording_start_time = datetime.datetime.now()
-                    fourcc = cv2.VideoWriter_fourcc(*"mp4v")
-                    video_writer = cv2.VideoWriter(f"recordings/recording_{current_datetime}.mp4", fourcc, 28.0, frame_size)
-
-            for (x, y, w, h) in bodies:
-                cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
-
-            if is_recording:
-                video_writer.write(frame)
-                if (datetime.datetime.now() - recording_start_time).total_seconds() >= SECONDS_TO_RECORD:
-                    is_recording = False
-                    video_writer.release()
+            if (datetime.datetime.now() - recording_start_time).total_seconds() >= SECONDS_TO_RECORD:
+                is_recording = False
 
             ret, buffer = cv2.imencode('.jpg', frame)
-            frame = buffer.tobytes()
+            frame_data_base64 = base64.b64encode(buffer).decode('utf-8')
+            
+            # Store frame data in MongoDB
+            recordings_collection.insert_one({
+                "camera_address": camera_address,
+                "timestamp": current_datetime,
+                "frame_data_base64": frame_data_base64
+            })
 
             yield (b'--frame\r\n'
-                   b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+                   b'Content-Type: image/jpeg\r\n\r\n' + buffer.tobytes() + b'\r\n')
 
 @app.route('/camera/<int:camera_id>')
 def index(camera_id):
@@ -114,39 +97,26 @@ def remove_camera():
 def get_cameras():
     return jsonify(camera_addresses)
 
-@app.route('/display_image/<string:document_id>')
-def display_image(document_id):
+@app.route('/api/recordings', methods=['GET'])
+def get_recordings():
+    camera_address = request.args.get('camera_address')
+    if not camera_address:
+        return jsonify({"message": "camera_address parameter is required"}), 400
 
-    document = faces_collection.find_one({'_id': ObjectId(document_id)})
-    if document is None:
-        return jsonify({"message": "Document not found"}), 404
+    recordings = recordings_collection.find({"camera_address": camera_address}).sort("timestamp", 1)
+    frames = []
 
-    image_data_base64 = document['image_data']
+    for recording in recordings:
+        frame_data_base64 = recording["frame_data_base64"]
+        frame_data_binary = base64.b64decode(frame_data_base64)
+        frames.append(frame_data_binary)
 
-    image_data_binary = base64.b64decode(image_data_base64)
+    def generate():
+        for frame in frames:
+            yield (b'--frame\r\n'
+                   b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
 
-    image = Image.open(BytesIO(image_data_binary))
-
-    buffered = BytesIO()
-    image.save(buffered, format="JPEG")
-    buffered.seek(0)
-    return send_file(buffered, mimetype='image/jpeg')
-
-@app.route('/api/test', methods=['GET'])
-def test():
-    return jsonify({"message": "Letsgo."})
-
-@app.route('/api/images', methods=['GET'])
-def get_all_images():
-    documents = faces_collection.find()
-    images = []
-    for document in documents:
-        images.append({
-            "id": str(document["_id"]),
-            "image_data": document["image_data"]
-        })
-    return jsonify(images)
+    return Response(generate(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=6969, debug=True)
-
