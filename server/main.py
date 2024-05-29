@@ -6,6 +6,7 @@ from pymongo import MongoClient
 import base64
 from io import BytesIO
 from PIL import Image
+from bson import ObjectId
 
 
 app = Flask(__name__)
@@ -13,6 +14,9 @@ CORS(app)
 
 video_captures = {}
 camera_addresses = ["https://192.168.8.176:8080/video"]
+
+face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
+body_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_fullbody.xml")
 
 client = MongoClient('mongodb+srv://admin:adminadmin@cluster0.4v8pcrv.mongodb.net/main?retryWrites=true&w=majority&appName=Cluster0')
 db = client.video_surveillance
@@ -33,7 +37,7 @@ def generate_frames(camera_address):
     global video_captures
     is_recording = False
     recording_start_time = None
-    SECONDS_TO_RECORD = 10  
+    SECONDS_TO_RECORD = 3
     video_capture = video_captures[camera_address]["capture"]
     frame_size = video_captures[camera_address]["frame_size"]
 
@@ -45,6 +49,19 @@ def generate_frames(camera_address):
             current_datetime = datetime.datetime.now()
 
             grayscale_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+            faces = face_cascade.detectMultiScale(grayscale_frame, 1.3, 5)
+
+            #shrani zaznan obraz
+            for (x, y, w, h) in faces:
+                cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 2) #izrisi moder kvadrat okrog zaznanega obraza
+                face_image = frame[y:y+h, x:x+w]
+                _, buffer = cv2.imencode('.jpg', face_image)
+                face_image_data = base64.b64encode(buffer).decode('utf-8')
+                faces_collection.insert_one({
+                    "camera_address": camera_address,
+                    "timestamp": current_datetime,
+                    "image_data": face_image_data
+                })
 
             if not is_recording:
                 is_recording = True
@@ -56,7 +73,6 @@ def generate_frames(camera_address):
             ret, buffer = cv2.imencode('.jpg', frame)
             frame_data_base64 = base64.b64encode(buffer).decode('utf-8')
             
-            # Store frame data in MongoDB
             recordings_collection.insert_one({
                 "camera_address": camera_address,
                 "timestamp": current_datetime,
@@ -108,16 +124,37 @@ def get_recordings():
     frames = []
 
     for recording in recordings:
-        frame_data_base64 = recording["frame_data_base64"]
-        frame_data_binary = base64.b64decode(frame_data_base64)
-        frames.append(frame_data_binary)
+        frames.append({
+            "id": str(recording["_id"]),
+            "frame_data_base64": recording["frame_data_base64"]
+        })
 
-    def generate():
-        for frame in frames:
-            yield (b'--frame\r\n'
-                   b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+    return jsonify(frames), 200
 
-    return Response(generate(), mimetype='multipart/x-mixed-replace; boundary=frame')
+@app.route('/api/images', methods=['GET'])
+def get_images():
+    faces = faces_collection.find().sort("timestamp", -1)  
+    image_list = []
+    for face in faces:
+        image_list.append({
+            "id": str(face["_id"]),
+            "image_data": face["image_data"]
+        })
+    return jsonify(image_list), 200
+
+@app.route('/display_image/<string:document_id>')
+def display_image(document_id):
+    document = faces_collection.find_one({'_id': ObjectId(document_id)})
+    if document is None:
+        return jsonify({"message": "Document not found"}), 404
+
+    image_data_base64 = document['image_data']
+    image_data_binary = base64.b64decode(image_data_base64)
+    image = Image.open(BytesIO(image_data_binary))
+    buffered = BytesIO()
+    image.save(buffered, format="JPEG")
+    buffered.seek(0)
+    return send_file(buffered, mimetype='image/jpeg')
 
 
 # OAUTH + BAZA ---------------------------------------------------------------------------------------------------------------------

@@ -20,10 +20,11 @@ import {
 import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid';
 
 import CamerasGrid from './CamerasGrid';
+import Faces from './Faces';
+import Recordings from './Recordings';
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import Oauth from './Oauth'
 
-// Components for each navigation item
 function Dashboard() {
   return <CamerasGrid />;
 }
@@ -42,7 +43,7 @@ function FacialRecognition() {
 }
 
 function VideoPlayback() {
-  return <div>Video Playback Content</div>;
+  return <Recordings />;
 }
 
 function VideoSharing() {
