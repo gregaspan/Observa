@@ -4,6 +4,7 @@ from flask import Flask, Response, jsonify, request
 import os
 from flask_cors import CORS
 
+
 app = Flask(__name__)
 CORS(app)
 
@@ -112,6 +113,10 @@ def get_cameras():
 @app.route('/api/test', methods=['GET'])
 def test():
     return jsonify({"message": "Letsgo."})
+
+
+# OAUTH + BAZA ---------------------------------------------------------------------------------------------------------------------
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=6969, debug=True)

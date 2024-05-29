@@ -19,6 +19,8 @@ import {
 import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid';
 
 import CamerasGrid from './CamerasGrid';
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import Oauth from '/.Oauth';
 
 // Components for each navigation item
 function Dashboard() {
@@ -389,6 +391,9 @@ export default function Example() {
                       ))}
                     </Menu.Items>
                   </Transition>
+                  <GoogleOAuthProvider clientId="948190828089-feonfqit48n904rikpjgapk2gnmd1qhl.apps.googleusercontent.com">
+                    <Oauth></Oauth>
+                  </GoogleOAuthProvider>
                 </Menu>
               </div>
             </div>
