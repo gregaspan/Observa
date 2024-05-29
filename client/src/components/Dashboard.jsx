@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import './styles.css';
 
 import { Fragment, useState } from 'react';
 import { Dialog, Menu, Transition } from '@headlessui/react';
@@ -20,7 +21,7 @@ import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 
 import CamerasGrid from './CamerasGrid';
 import { GoogleOAuthProvider } from "@react-oauth/google";
-import Oauth from '/.Oauth';
+import Oauth from './Oauth'
 
 // Components for each navigation item
 function Dashboard() {
@@ -35,8 +36,9 @@ function MotionDetection() {
   return <div>Motion Detection Content</div>;
 }
 
+
 function FacialRecognition() {
-  return <div>Facial Recognition Content</div>;
+  return <Faces />;
 }
 
 function VideoPlayback() {
@@ -162,7 +164,7 @@ export default function Example() {
                     <div className="flex h-16 shrink-0 items-center">
                       <img
                         className="h-8 w-auto"
-                        src="https://tailwindui.com/img/logos/mark.svg?color=white"
+                        src="https://svgshare.com/i/16Te.svg"
                         alt="Your Company"
                       />
                     </div>
@@ -243,7 +245,7 @@ export default function Example() {
             <div className="flex h-16 shrink-0 items-center">
               <img
                 className="h-8 w-auto"
-                src="https://tailwindui.com/img/logos/mark.svg?color=white"
+                src="https://svgshare.com/i/16Te.svg"
                 alt="Your Company"
               />
             </div>
