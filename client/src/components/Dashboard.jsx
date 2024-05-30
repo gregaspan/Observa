@@ -22,6 +22,7 @@ import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 import CamerasGrid from './CamerasGrid';
 import Faces from './Faces';
 import Recordings from './Recordings';
+import Motion from './Motion';
 
 function Dashboard() {
   return <CamerasGrid />;
@@ -32,7 +33,7 @@ function Reports() {
 }
 
 function MotionDetection() {
-  return <div>Motion Detection Content</div>;
+  return <Motion />;
 }
 
 

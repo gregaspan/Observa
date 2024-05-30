@@ -14,7 +14,7 @@ app = Flask(__name__)
 CORS(app)
 
 video_captures = {}
-camera_addresses = ["https://192.168.8.176:8080/video"]
+camera_addresses = ["https://164.8.113.108:8080/video"]
 
 face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
 body_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_fullbody.xml")
@@ -22,6 +22,7 @@ body_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_fullbo
 client = MongoClient('mongodb+srv://admin:adminadmin@cluster0.4v8pcrv.mongodb.net/main?retryWrites=true&w=majority&appName=Cluster0')
 db = client.video_surveillance
 faces_collection = db.detected_faces
+motion_collection = db.detected_motion
 recordings_collection = db.recordings_collection  
 users_collection = db.users 
 
@@ -43,6 +44,7 @@ def generate_frames(camera_address):
     SECONDS_TO_RECORD = 3
     video_capture = video_captures[camera_address]["capture"]
     frame_size = video_captures[camera_address]["frame_size"]
+    last_frame = None
 
     while True:
         success, frame = video_capture.read()
@@ -50,13 +52,12 @@ def generate_frames(camera_address):
             break
         else:
             current_datetime = datetime.datetime.now()
-
             grayscale_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-            faces = face_cascade.detectMultiScale(grayscale_frame, 1.3, 5)
 
-            #shrani zaznan obraz
+            #Face Detection
+            faces = face_cascade.detectMultiScale(grayscale_frame, 1.3, 5)
             for (x, y, w, h) in faces:
-                cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 2) #izrisi moder kvadrat okrog zaznanega obraza
+                cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 2)
                 face_image = frame[y:y+h, x:x+w]
                 _, buffer = cv2.imencode('.jpg', face_image)
                 face_image_data = base64.b64encode(buffer).decode('utf-8')
@@ -65,6 +66,32 @@ def generate_frames(camera_address):
                     "timestamp": current_datetime,
                     "image_data": face_image_data
                 })
+
+            #Motion Detection
+            if last_frame is None:
+                last_frame = grayscale_frame
+                continue
+
+            frame_diff = cv2.absdiff(last_frame, grayscale_frame)
+            _, threshold_frame = cv2.threshold(frame_diff, 30, 255, cv2.THRESH_BINARY)
+            dilated_frame = cv2.dilate(threshold_frame, None, iterations=2)
+            contours, _ = cv2.findContours(dilated_frame, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+            for contour in contours:
+                if cv2.contourArea(contour) < 100000:
+                    continue
+                (x, y, w, h) = cv2.boundingRect(contour)
+                cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
+                motion_image = frame[y:y+h, x:x+w]
+                _, buffer = cv2.imencode('.jpg', motion_image)
+                motion_image_data = base64.b64encode(buffer).decode('utf-8')
+                motion_collection.insert_one({
+                    "camera_address": camera_address,
+                    "timestamp": current_datetime,
+                    "image_data": motion_image_data
+                })
+
+            last_frame = grayscale_frame
 
             if not is_recording:
                 is_recording = True
@@ -75,7 +102,7 @@ def generate_frames(camera_address):
 
             ret, buffer = cv2.imencode('.jpg', frame)
             frame_data_base64 = base64.b64encode(buffer).decode('utf-8')
-            
+
             recordings_collection.insert_one({
                 "camera_address": camera_address,
                 "timestamp": current_datetime,
@@ -142,6 +169,17 @@ def get_images():
         image_list.append({
             "id": str(face["_id"]),
             "image_data": face["image_data"]
+        })
+    return jsonify(image_list), 200
+
+@app.route('/api/motion_images', methods=['GET'])
+def get_motion_images():
+    motions = motion_collection.find().sort("timestamp", -1)
+    image_list = []
+    for motion in motions:
+        image_list.append({
+            "id": str(motion["_id"]),
+            "image_data": motion["image_data"]
         })
     return jsonify(image_list), 200
 
