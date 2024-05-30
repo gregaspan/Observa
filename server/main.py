@@ -7,6 +7,8 @@ import base64
 from io import BytesIO
 from PIL import Image
 from bson import ObjectId
+from werkzeug.security import generate_password_hash, check_password_hash
+
 
 app = Flask(__name__)
 CORS(app)
@@ -21,6 +23,8 @@ client = MongoClient('mongodb+srv://admin:adminadmin@cluster0.4v8pcrv.mongodb.ne
 db = client.video_surveillance
 faces_collection = db.detected_faces
 recordings_collection = db.recordings_collection  
+users_collection = db.users 
+
 
 def init_video_captures():
     global video_captures
@@ -155,5 +159,45 @@ def display_image(document_id):
     buffered.seek(0)
     return send_file(buffered, mimetype='image/jpeg')
 
+@app.route('/register', methods=['POST'])
+def register():
+    # Get the JSON data from the request
+    data = request.get_json()
+    email = data.get('email')
+    name = data.get('name')
+    password = data.get('password')
+    
+    # Check if user already exists
+    if users_collection.find_one({'email': email}):
+        return jsonify({"message": "User already exists"}), 400
+
+    # Hash the password using PBKDF2
+    hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
+
+    # Create new user
+    new_user = {
+        'name': name,
+        'email': email,
+        'password': hashed_password
+    }
+
+    # Insert the user into the database
+    users_collection.insert_one(new_user)
+
+    return jsonify({"message": "User registered successfully"}), 201
+
+@app.route('/login', methods=['POST'])
+def login():
+    # Get the JSON data from the request
+    data = request.get_json()
+    email = data.get('email')
+    password = data.get('password')
+
+    # Find user by email
+    user = users_collection.find_one({'email': email})
+    if not user or not check_password_hash(user['password'], password):
+        return jsonify({"message": "Invalid email or password"}), 400
+
+    return jsonify({"message": "Login successful"}), 200
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=6969, debug=True)
