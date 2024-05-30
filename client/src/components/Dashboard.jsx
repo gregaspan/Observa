@@ -21,8 +21,8 @@ import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 
 import CamerasGrid from './CamerasGrid';
 import Faces from './Faces';
+import Recordings from './Recordings';
 
-// Components for each navigation item
 function Dashboard() {
   return <CamerasGrid />;
 }
@@ -41,7 +41,7 @@ function FacialRecognition() {
 }
 
 function VideoPlayback() {
-  return <div>Video Playback Content</div>;
+  return <Recordings />;
 }
 
 function VideoSharing() {
@@ -392,9 +392,6 @@ export default function Example() {
                       ))}
                     </Menu.Items>
                   </Transition>
-                  <GoogleOAuthProvider clientId="948190828089-feonfqit48n904rikpjgapk2gnmd1qhl.apps.googleusercontent.com">
-                    <Oauth></Oauth>
-                  </GoogleOAuthProvider>
                 </Menu>
               </div>
             </div>
