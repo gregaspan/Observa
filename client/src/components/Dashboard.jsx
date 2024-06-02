@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
-import './styles.css';
+import React, { useEffect } from "react";
+import "./styles.css";
 
-import { Fragment, useState } from 'react';
-import { Dialog, Menu, Transition } from '@headlessui/react';
+import { Fragment, useState } from "react";
+import { Dialog, Menu, Transition } from "@headlessui/react";
 import {
   Bars3Icon,
   BellIcon,
@@ -16,13 +16,15 @@ import {
   ShareIcon,
   EnvelopeIcon,
   BookOpenIcon,
-} from '@heroicons/react/24/outline';
-import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid';
+} from "@heroicons/react/24/outline";
+import {
+  ChevronDownIcon,
+  MagnifyingGlassIcon,
+} from "@heroicons/react/20/solid";
 
 import CamerasGrid from './CamerasGrid';
 import Faces from './Faces';
 import Recordings from './Recordings';
-import Motion from './Motion';
 
 function Dashboard() {
   return <CamerasGrid />;
@@ -36,7 +38,6 @@ function MotionDetection() {
   return <Motion />;
 }
 
-
 function FacialRecognition() {
   return <Faces />;
 }
@@ -45,42 +46,47 @@ function VideoPlayback() {
   return <Recordings />;
 }
 
-function VideoSharing() {
-  return <div>Video Sharing Content</div>;
-}
 
 function EmailNotifications() {
   return <div>Email Notifications Content</div>;
 }
 
 function Documentation() {
-  return <div>Documentation Content</div>;
+  return <Test />;
 }
 
 const navigation = [
-  { name: 'Dashboard', component: Dashboard, icon: HomeIcon },
-  { name: 'Reports', component: Reports, icon: ChartBarIcon },
-  { name: 'Motion Detection', component: MotionDetection, icon: EyeIcon },
-  { name: 'Facial Recognition', component: FacialRecognition, icon: UserCircleIcon },
-  { name: 'Video Playback', component: VideoPlayback, icon: PlayCircleIcon },
-  { name: 'Video Sharing', component: VideoSharing, icon: ShareIcon },
-  { name: 'Email Notifications', component: EmailNotifications, icon: EnvelopeIcon },
-  { name: 'Documentation', component: Documentation, icon: BookOpenIcon },
+  { name: "Dashboard", component: Dashboard, icon: HomeIcon },
+  { name: "Reports", component: Reports, icon: ChartBarIcon },
+  { name: "Motion Detection", component: MotionDetection, icon: EyeIcon },
+  {
+    name: "Facial Recognition",
+    component: FacialRecognition,
+    icon: UserCircleIcon,
+  },
+  { name: "Video Playback", component: VideoPlayback, icon: PlayCircleIcon },
+  {
+    name: "Email Notifications",
+    component: EmailNotifications,
+    icon: EnvelopeIcon,
+  },
+  { name: "Documentation", component: Documentation, icon: BookOpenIcon },
 ];
 
-const teams = [
-  { id: 1, name: 'Heroicons', href: '#', initial: 'H', current: false },
-  { id: 2, name: 'Tailwind Labs', href: '#', initial: 'T', current: false },
-  { id: 3, name: 'Workcation', href: '#', initial: 'W', current: false },
-];
+const signOut = () => {
+  localStorage.removeItem('user');
+  window.location.href = '/login'; // Redirect to login page
+};
 
 const userNavigation = [
-  { name: 'Your profile', href: '#' },
-  { name: 'Sign out', href: '#' },
+  { name: "Your profile", href: "#" },
+  { name: "Sign out", href: "#", onClick: signOut },
 ];
 
+const user = JSON.parse(localStorage.getItem("user"));
+
 function classNames(...classes) {
-  return classes.filter(Boolean).join(' ');
+  return classes.filter(Boolean).join(" ");
 }
 
 export default function Example() {
@@ -90,37 +96,44 @@ export default function Example() {
   const [teams, setTeams] = useState([]);
 
   useEffect(() => {
-    // Function to fetch data from the API
     const fetchData = async () => {
       try {
-        const response = await fetch('http://127.0.0.1:6969/api/cameras');
+        const userId = JSON.parse(localStorage.getItem('user')).user_id;
+        const response = await fetch(`http://127.0.0.1:6969/api/cameras?user_id=${userId}`);
         const data = await response.json();
-        // Transform the data
         const transformedData = data.map((item, index) => ({
           id: index + 1,
           name: item.name,
           href: item.address,
-          initial: item.name.charAt(0), // First letter of the name
-          current: false
+          initial: item.name.charAt(0),
+          current: false,
         }));
-        // Update the state
         setTeams(transformedData);
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error("Error fetching data:", error);
       }
     };
 
     fetchData();
   }, []);
+
   const handleNavClick = (navItem) => {
     setSelectedNav(navItem);
   };
+
+  if (!user) {
+    return <div>You are not logged in.</div>;
+  }
 
   return (
     <>
       <div>
         <Transition.Root show={sidebarOpen} as={Fragment}>
-          <Dialog as="div" className="relative z-50 lg:hidden" onClose={setSidebarOpen}>
+          <Dialog
+            as="div"
+            className="relative z-50 lg:hidden"
+            onClose={setSidebarOpen}
+          >
             <Transition.Child
               as={Fragment}
               enter="transition-opacity ease-linear duration-300"
@@ -154,9 +167,16 @@ export default function Example() {
                     leaveTo="opacity-0"
                   >
                     <div className="absolute left-full top-0 flex w-16 justify-center pt-5">
-                      <button type="button" className="-m-2.5 p-2.5" onClick={() => setSidebarOpen(false)}>
+                      <button
+                        type="button"
+                        className="-m-2.5 p-2.5"
+                        onClick={() => setSidebarOpen(false)}
+                      >
                         <span className="sr-only">Close sidebar</span>
-                        <XMarkIcon className="h-6 w-6 text-white" aria-hidden="true" />
+                        <XMarkIcon
+                          className="h-6 w-6 text-white"
+                          aria-hidden="true"
+                        />
                       </button>
                     </div>
                   </Transition.Child>
@@ -178,15 +198,17 @@ export default function Example() {
                                   onClick={() => handleNavClick(item)}
                                   className={classNames(
                                     selectedNav.name === item.name
-                                      ? 'bg-indigo-700 text-white'
-                                      : 'text-indigo-200 hover:text-white hover:bg-indigo-700',
-                                    'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold w-full text-left'
+                                      ? "bg-indigo-700 text-white"
+                                      : "text-indigo-200 hover:text-white hover:bg-indigo-700",
+                                    "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold w-full text-left"
                                   )}
                                 >
                                   <item.icon
                                     className={classNames(
-                                      selectedNav.name === item.name ? 'text-white' : 'text-indigo-200 group-hover:text-white',
-                                      'h-6 w-6 shrink-0'
+                                      selectedNav.name === item.name
+                                        ? "text-white"
+                                        : "text-indigo-200 group-hover:text-white",
+                                      "h-6 w-6 shrink-0"
                                     )}
                                     aria-hidden="true"
                                   />
@@ -197,7 +219,9 @@ export default function Example() {
                           </ul>
                         </li>
                         <li>
-                          <div className="text-xs font-semibold leading-6 text-indigo-200">Your teams</div>
+                          <div className="text-xs font-semibold leading-6 text-indigo-200">
+                            Your Cameras
+                          </div>
                           <ul role="list" className="-mx-2 mt-2 space-y-1">
                             {teams.map((team) => (
                               <li key={team.name}>
@@ -205,9 +229,9 @@ export default function Example() {
                                   href={team.href}
                                   className={classNames(
                                     team.current
-                                      ? 'bg-indigo-700 text-white'
-                                      : 'text-indigo-200 hover:text-white hover:bg-indigo-700',
-                                    'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
+                                      ? "bg-indigo-700 text-white"
+                                      : "text-indigo-200 hover:text-white hover:bg-indigo-700",
+                                    "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
                                   )}
                                 >
                                   <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-indigo-400 bg-indigo-500 text-[0.625rem] font-medium text-white">
@@ -259,15 +283,17 @@ export default function Example() {
                           onClick={() => handleNavClick(item)}
                           className={classNames(
                             selectedNav.name === item.name
-                              ? 'bg-indigo-700 text-white'
-                              : 'text-indigo-200 hover:text-white hover:bg-indigo-700',
-                            'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold w-full text-left'
+                              ? "bg-indigo-700 text-white"
+                              : "text-indigo-200 hover:text-white hover:bg-indigo-700",
+                            "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold w-full text-left"
                           )}
                         >
                           <item.icon
                             className={classNames(
-                              selectedNav.name === item.name ? 'text-white' : 'text-indigo-200 group-hover:text-white',
-                              'h-6 w-6 shrink-0'
+                              selectedNav.name === item.name
+                                ? "text-white"
+                                : "text-indigo-200 group-hover:text-white",
+                              "h-6 w-6 shrink-0"
                             )}
                             aria-hidden="true"
                           />
@@ -278,7 +304,9 @@ export default function Example() {
                   </ul>
                 </li>
                 <li>
-                  <div className="text-xs font-semibold leading-6 text-indigo-200">Your Cameras</div>
+                  <div className="text-xs font-semibold leading-6 text-indigo-200">
+                    Your Cameras
+                  </div>
                   <ul role="list" className="-mx-2 mt-2 space-y-1">
                     {teams.map((team) => (
                       <li key={team.name}>
@@ -286,9 +314,9 @@ export default function Example() {
                           href={team.href}
                           className={classNames(
                             team.current
-                              ? 'bg-indigo-700 text-white'
-                              : 'text-indigo-200 hover:text-white hover:bg-indigo-700',
-                            'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
+                              ? "bg-indigo-700 text-white"
+                              : "text-indigo-200 hover:text-white hover:bg-indigo-700",
+                            "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
                           )}
                         >
                           <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-indigo-400 bg-indigo-500 text-[0.625rem] font-medium text-white">
@@ -319,12 +347,19 @@ export default function Example() {
 
         <div className="lg:pl-72">
           <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
-            <button type="button" className="-m-2.5 p-2.5 text-gray-700 lg:hidden" onClick={() => setSidebarOpen(true)}>
+            <button
+              type="button"
+              className="-m-2.5 p-2.5 text-gray-700 lg:hidden"
+              onClick={() => setSidebarOpen(true)}
+            >
               <span className="sr-only">Open sidebar</span>
               <Bars3Icon className="h-6 w-6" aria-hidden="true" />
             </button>
 
-            <div className="h-6 w-px bg-gray-900/10 lg:hidden" aria-hidden="true" />
+            <div
+              className="h-6 w-px bg-gray-900/10 lg:hidden"
+              aria-hidden="true"
+            />
 
             <div className="flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
               <form className="relative flex flex-1" action="#" method="GET">
@@ -344,12 +379,18 @@ export default function Example() {
                 />
               </form>
               <div className="flex items-center gap-x-4 lg:gap-x-6">
-                <button type="button" className="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500">
+                <button
+                  type="button"
+                  className="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500"
+                >
                   <span className="sr-only">View notifications</span>
                   <BellIcon className="h-6 w-6" aria-hidden="true" />
                 </button>
 
-                <div className="hidden lg:block lg:h-6 lg:w-px lg:bg-gray-900/10" aria-hidden="true" />
+                <div
+                  className="hidden lg:block lg:h-6 lg:w-px lg:bg-gray-900/10"
+                  aria-hidden="true"
+                />
 
                 <Menu as="div" className="relative">
                   <Menu.Button className="-m-1.5 flex items-center p-1.5">
@@ -360,10 +401,16 @@ export default function Example() {
                       alt=""
                     />
                     <span className="hidden lg:flex lg:items-center">
-                      <span className="ml-4 text-sm font-semibold leading-6 text-gray-900" aria-hidden="true">
-                        Tom Cook
+                      <span
+                        className="ml-4 text-sm font-semibold leading-6 text-gray-900"
+                        aria-hidden="true"
+                      >
+                        {user.name}
                       </span>
-                      <ChevronDownIcon className="ml-2 h-5 w-5 text-gray-400" aria-hidden="true" />
+                      <ChevronDownIcon
+                        className="ml-2 h-5 w-5 text-gray-400"
+                        aria-hidden="true"
+                      />
                     </span>
                   </Menu.Button>
                   <Transition
@@ -381,9 +428,10 @@ export default function Example() {
                           {({ active }) => (
                             <a
                               href={item.href}
+                              onClick={item.onClick}
                               className={classNames(
-                                active ? 'bg-gray-50' : '',
-                                'block px-3 py-1 text-sm leading-6 text-gray-900'
+                                active ? "bg-gray-50" : "",
+                                "block px-3 py-1 text-sm leading-6 text-gray-900"
                               )}
                             >
                               {item.name}
