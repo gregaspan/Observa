@@ -25,7 +25,6 @@ export default function RegistrationPage() {
 
     if (response.ok) {
       alert('Registration successful');
-      window.location.href = '/login';
     } else {
       const result = await response.json();
       alert(`Registration failed: ${result.message}`);
