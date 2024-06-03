@@ -214,7 +214,7 @@ def register():
     email = data.get('email')
     name = data.get('name')
     password = data.get('password')
-    
+
     if users_collection.find_one({'email': email}):
         return jsonify({"message": "User already exists"}), 400
 
@@ -224,7 +224,10 @@ def register():
         'name': name,
         'email': email,
         'password': hashed_password,
-        'cameras': []
+        'cameras': [],
+        'email_subscribers': [email],  # Add user's own email to email subscribers
+        'phone_subscribers': [],
+        'avatar': 'https://icons.veryicon.com/png/o/internet--web/prejudice/user-128.png'
     }
 
     users_collection.insert_one(new_user)
@@ -241,16 +244,67 @@ def login():
     if not user or not check_password_hash(user['password'], password):
         return jsonify({"message": "Invalid email or password"}), 400
 
+    # Include all relevant user data
     user_data = {
         "message": "Login successful",
         "user_id": str(user["_id"]),
         "name": user["name"],
         "email": user["email"],
         "avatar": user.get("avatar", ""),
-        "cameras": user.get("cameras", [])
+        "cameras": user.get("cameras", []),
+        "email_subscribers": user.get("email_subscribers", [email]),
+        "phone_subscribers": user.get("phone_subscribers", [])
     }
 
+    # Ensure the user's email is always in the email_subscribers list
+    if email not in user_data["email_subscribers"]:
+        users_collection.update_one(
+            {"_id": user["_id"]},
+            {"$addToSet": {"email_subscribers": email}}
+        )
+        user_data["email_subscribers"].append(email)
+
     return jsonify(user_data), 200
+
+@app.route('/api/add_email_subscriber', methods=['POST'])
+def add_email_subscriber():
+    data = request.get_json()
+    user_id = data.get('user_id')
+    email_subscriber = data.get('email_subscriber')
+
+    if not user_id or not email_subscriber:
+        return jsonify({"message": "user_id and email_subscriber are required"}), 400
+
+    user = users_collection.find_one({"_id": ObjectId(user_id)})
+    if not user:
+        return jsonify({"message": "User not found"}), 404
+
+    users_collection.update_one(
+        {"_id": ObjectId(user_id)},
+        {"$addToSet": {"email_subscribers": email_subscriber}}
+    )
+
+    return jsonify({"message": "Email subscriber added successfully"}), 200
+
+@app.route('/api/add_phone_subscriber', methods=['POST'])
+def add_phone_subscriber():
+    data = request.get_json()
+    user_id = data.get('user_id')
+    phone_subscriber = data.get('phone_subscriber')
+
+    if not user_id or not phone_subscriber:
+        return jsonify({"message": "user_id and phone_subscriber are required"}), 400
+
+    user = users_collection.find_one({"_id": ObjectId(user_id)})
+    if not user:
+        return jsonify({"message": "User not found"}), 404
+
+    users_collection.update_one(
+        {"_id": ObjectId(user_id)},
+        {"$addToSet": {"phone_subscribers": phone_subscriber}}
+    )
+
+    return jsonify({"message": "Phone subscriber added successfully"}), 200
 
 
 @app.route('/api/update_profile', methods=['POST'])

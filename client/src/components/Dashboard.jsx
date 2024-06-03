@@ -23,6 +23,7 @@ import Faces from "./Faces";
 import Recordings from "./Recordings";
 import Test from "./TestUserCamera";
 import Profile from "./Profile";
+import AddSubscriber from "./AddSubscriber";
 
 function Dashboard() {
   return <CamerasGrid />;
@@ -45,7 +46,7 @@ function VideoPlayback() {
 }
 
 function EmailNotifications() {
-  return <div>Email Notifications Content</div>;
+  return <AddSubscriber />;
 }
 
 function Documentation() {
