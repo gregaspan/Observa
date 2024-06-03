@@ -29,6 +29,7 @@ users = [
         "name": "User1",
         "email": "user1@example.com",
         "password": generate_password_hash("password1", method='pbkdf2:sha256'),
+        "avatar": "https://randomuser.me/api/portraits/men/1.jpg",
         "cameras": [
             {"name": "User1_Camera1", "address": "https://192.168.8.176:8080/video"},
             {"name": "User1_Camera2", "address": "https://192.168.8.177:8080/video"}
@@ -38,12 +39,14 @@ users = [
         "name": "User2",
         "email": "user2@example.com",
         "password": generate_password_hash("password2", method='pbkdf2:sha256'),
+        "avatar": "https://randomuser.me/api/portraits/women/2.jpg",
         "cameras": [
             {"name": "User2_Camera1", "address": "https://192.168.8.178:8080/video"},
             {"name": "User2_Camera2", "address": "https://192.168.8.179:8080/video"}
         ]
     }
 ]
+
 
 # Insert users into the database
 users_collection.insert_many(users)
@@ -238,44 +241,56 @@ def login():
     if not user or not check_password_hash(user['password'], password):
         return jsonify({"message": "Invalid email or password"}), 400
 
-    # Include all relevant user data
     user_data = {
         "message": "Login successful",
         "user_id": str(user["_id"]),
         "name": user["name"],
         "email": user["email"],
+        "avatar": user.get("avatar", ""),
         "cameras": user.get("cameras", [])
     }
 
     return jsonify(user_data), 200
 
+
 @app.route('/api/update_profile', methods=['POST'])
 def update_profile():
     data = request.get_json()
     user_id = data.get('user_id')
-    username = data.get('username')
+    name = data.get('name')
     email = data.get('email')
+    avatar = data.get('avatar')
 
-    if not user_id or not username or not email:
-        return jsonify({"message": "user_id, username, and email are required"}), 400
+    if not user_id or not name or not email:
+        return jsonify({"message": "user_id, name, and email are required"}), 400
 
     user = users_collection.find_one({"_id": ObjectId(user_id)})
     if not user:
         return jsonify({"message": "User not found"}), 404
 
+    update_fields = {
+        "name": name,
+        "email": email,
+    }
+    if avatar:
+        update_fields["avatar"] = avatar
+
     users_collection.update_one(
         {"_id": ObjectId(user_id)},
-        {"$set": {"username": username, "email": email}}
+        {"$set": update_fields}
     )
 
     updated_user = users_collection.find_one({"_id": ObjectId(user_id)})
     user_data = {
         "user_id": str(updated_user["_id"]),
-        "username": updated_user["username"],
-        "email": updated_user["email"]
+        "name": updated_user["name"],
+        "email": updated_user["email"],
+        "avatar": updated_user.get("avatar", "")
     }
 
     return jsonify(user_data), 200
+
+
 
 @app.route('/api/change_password', methods=['POST'])
 def change_password():
@@ -295,6 +310,7 @@ def change_password():
     )
 
     return jsonify({"message": "Password updated successfully"}), 200
+
 
 @app.route('/api/delete_account', methods=['POST'])
 def delete_account():

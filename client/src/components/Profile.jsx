@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 
 const AccountSettings = () => {
-  const [user, setUser] = useState({ username: '', email: '' });
+  const [user, setUser] = useState({ user_id: '', name: '', email: '', avatar: '' });
   const [passwords, setPasswords] = useState({ currentPassword: '', newPassword: '', confirmPassword: '' });
 
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem('user'));
     if (storedUser) {
-      setUser({ name: storedUser.name, email: storedUser.email });
+      setUser({ user_id: storedUser.user_id, name: storedUser.name, email: storedUser.email, avatar: storedUser.avatar });
     }
   }, []);
 
@@ -30,7 +30,7 @@ const AccountSettings = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('/api/update_profile', {
+      const response = await fetch('http://127.0.0.1:6969/api/update_profile', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -43,7 +43,8 @@ const AccountSettings = () => {
         localStorage.setItem('user', JSON.stringify(result));
         alert('Profile updated successfully');
       } else {
-        alert('Error updating profile');
+        const error = await response.json();
+        alert('Error updating profile: ' + error.message);
       }
     } catch (error) {
       console.error('Error:', error);
@@ -58,7 +59,7 @@ const AccountSettings = () => {
     }
 
     try {
-      const response = await fetch('/api/change_password', {
+      const response = await fetch('http://127.0.0.1:6969/api/change_password', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -74,7 +75,8 @@ const AccountSettings = () => {
         alert('Password updated successfully');
         setPasswords({ currentPassword: '', newPassword: '', confirmPassword: '' });
       } else {
-        alert('Error updating password');
+        const error = await response.json();
+        alert('Error updating password: ' + error.message);
       }
     } catch (error) {
       console.error('Error:', error);
@@ -83,7 +85,7 @@ const AccountSettings = () => {
 
   const handleDeleteAccount = async () => {
     try {
-      const response = await fetch('/api/delete_account', {
+      const response = await fetch('http://127.0.0.1:6969/api/delete_account', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -96,10 +98,21 @@ const AccountSettings = () => {
         alert('Account deleted successfully');
         // Redirect or perform additional cleanup
       } else {
-        alert('Error deleting account');
+        const error = await response.json();
+        alert('Error deleting account: ' + error.message);
       }
     } catch (error) {
       console.error('Error:', error);
+    }
+  };
+
+  const handleAvatarChange = async () => {
+    const avatarUrl = prompt('Enter the URL of the new avatar:');
+    if (avatarUrl) {
+      setUser((prevUser) => ({
+        ...prevUser,
+        avatar: avatarUrl,
+      }));
     }
   };
 
@@ -118,13 +131,14 @@ const AccountSettings = () => {
           <div className="grid grid-cols-1 gap-x-6 gap-y-8 sm:max-w-xl sm:grid-cols-6">
             <div className="col-span-full flex items-center gap-x-8">
               <img
-                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                src={user.avatar || "https://via.placeholder.com/150"}
                 alt=""
                 className="h-24 w-24 flex-none rounded-lg bg-gray-800 object-cover"
               />
               <div>
                 <button
                   type="button"
+                  onClick={handleAvatarChange}
                   className="rounded-md bg-gray-700 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-800"
                 >
                   Change avatar
@@ -134,20 +148,20 @@ const AccountSettings = () => {
             </div>
 
             <div className="col-span-full">
-              <label htmlFor="username" className="block text-sm font-medium leading-6 text-gray-900">
-                Username
+              <label htmlFor="name" className="block text-sm font-medium leading-6 text-gray-900">
+                Name
               </label>
               <div className="mt-2">
-                  <input
-                    type="text"
-                    name="username"
-                    id="username"
-                    autoComplete="username"
-                    className="block w-full rounded-md border-0 bg-gray-50 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
-                    placeholder="janesmith"
-                    value={user.name}
-                    onChange={handleChange}
-                  />
+                <input
+                  type="text"
+                  name="name"
+                  id="name"
+                  autoComplete="name"
+                  className="block w-full rounded-md border-0 bg-gray-50 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
+                  placeholder="janesmith"
+                  value={user.name}
+                  onChange={handleChange}
+                />
               </div>
             </div>
 
