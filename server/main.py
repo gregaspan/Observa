@@ -107,12 +107,12 @@ def generate_frames(user_id, camera_address):
             ret, buffer = cv2.imencode('.jpg', frame)
             frame_data_base64 = base64.b64encode(buffer).decode('utf-8')
             
-            recordings_collection.insert_one({
-                "user_id": user_id,
-                "camera_address": camera_address,
-                "timestamp": current_datetime,
-                "frame_data_base64": frame_data_base64
-            })
+            # recordings_collection.insert_one({
+            #     "user_id": user_id,
+            #     "camera_address": camera_address,
+            #     "timestamp": current_datetime,
+            #     "frame_data_base64": frame_data_base64
+            # })
 
             yield (b'--frame\r\n'
                    b'Content-Type: image/jpeg\r\n\r\n' + buffer.tobytes() + b'\r\n')
