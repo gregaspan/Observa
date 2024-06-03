@@ -249,6 +249,69 @@ def login():
 
     return jsonify(user_data), 200
 
+@app.route('/api/update_profile', methods=['POST'])
+def update_profile():
+    data = request.get_json()
+    user_id = data.get('user_id')
+    username = data.get('username')
+    email = data.get('email')
+
+    if not user_id or not username or not email:
+        return jsonify({"message": "user_id, username, and email are required"}), 400
+
+    user = users_collection.find_one({"_id": ObjectId(user_id)})
+    if not user:
+        return jsonify({"message": "User not found"}), 404
+
+    users_collection.update_one(
+        {"_id": ObjectId(user_id)},
+        {"$set": {"username": username, "email": email}}
+    )
+
+    updated_user = users_collection.find_one({"_id": ObjectId(user_id)})
+    user_data = {
+        "user_id": str(updated_user["_id"]),
+        "username": updated_user["username"],
+        "email": updated_user["email"]
+    }
+
+    return jsonify(user_data), 200
+
+@app.route('/api/change_password', methods=['POST'])
+def change_password():
+    data = request.get_json()
+    user_id = data.get('user_id')
+    current_password = data.get('current_password')
+    new_password = data.get('new_password')
+
+    user = users_collection.find_one({"_id": ObjectId(user_id)})
+    if not user or not check_password_hash(user['password'], current_password):
+        return jsonify({"message": "Invalid current password"}), 400
+
+    hashed_new_password = generate_password_hash(new_password, method='pbkdf2:sha256')
+    users_collection.update_one(
+        {"_id": ObjectId(user_id)},
+        {"$set": {"password": hashed_new_password}}
+    )
+
+    return jsonify({"message": "Password updated successfully"}), 200
+
+@app.route('/api/delete_account', methods=['POST'])
+def delete_account():
+    data = request.get_json()
+    user_id = data.get('user_id')
+
+    user = users_collection.find_one({"_id": ObjectId(user_id)})
+    if not user:
+        return jsonify({"message": "User not found"}), 404
+
+    users_collection.delete_one({"_id": ObjectId(user_id)})
+    faces_collection.delete_many({"user_id": user_id})
+    recordings_collection.delete_many({"user_id": user_id})
+
+    return jsonify({"message": "Account deleted successfully"}), 200
+
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=6969, debug=True)

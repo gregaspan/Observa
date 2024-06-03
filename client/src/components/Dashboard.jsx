@@ -1,7 +1,5 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState, Fragment } from "react";
 import "./styles.css";
-
-import { Fragment, useState } from "react";
 import { Dialog, Menu, Transition } from "@headlessui/react";
 import {
   Bars3Icon,
@@ -16,16 +14,15 @@ import {
   ShareIcon,
   EnvelopeIcon,
   BookOpenIcon,
-} from "@heroicons/react/24/outline";
-import {
   ChevronDownIcon,
   MagnifyingGlassIcon,
-} from "@heroicons/react/20/solid";
+} from "@heroicons/react/24/outline";
 
 import CamerasGrid from "./CamerasGrid";
 import Faces from "./Faces";
 import Recordings from "./Recordings";
 import Test from "./TestUserCamera";
+import Profile from "./Profile";
 
 function Dashboard() {
   return <CamerasGrid />;
@@ -47,7 +44,6 @@ function VideoPlayback() {
   return <Recordings />;
 }
 
-
 function EmailNotifications() {
   return <div>Email Notifications Content</div>;
 }
@@ -62,14 +58,11 @@ const navigation = [
   { name: "Motion Detection", component: MotionDetection, icon: EyeIcon },
   {
     name: "Facial Recognition",
-    component: FacialRecognition,
-    icon: UserCircleIcon,
+    component: FacialRecognition, icon: UserCircleIcon,
   },
   { name: "Video Playback", component: VideoPlayback, icon: PlayCircleIcon },
   {
-    name: "Email Notifications",
-    component: EmailNotifications,
-    icon: EnvelopeIcon,
+    name: "Email Notifications", component: EmailNotifications, icon: EnvelopeIcon,
   },
   { name: "Documentation", component: Documentation, icon: BookOpenIcon },
 ];
@@ -80,7 +73,7 @@ const signOut = () => {
 };
 
 const userNavigation = [
-  { name: "Your profile", href: "#" },
+  { name: "Your profile", href: "#", component: Profile },
   { name: "Sign out", href: "#", onClick: signOut },
 ];
 
@@ -130,11 +123,7 @@ export default function Example() {
     <>
       <div>
         <Transition.Root show={sidebarOpen} as={Fragment}>
-          <Dialog
-            as="div"
-            className="relative z-50 lg:hidden"
-            onClose={setSidebarOpen}
-          >
+          <Dialog as="div" className="relative z-50 lg:hidden" onClose={setSidebarOpen}>
             <Transition.Child
               as={Fragment}
               enter="transition-opacity ease-linear duration-300"
@@ -429,7 +418,7 @@ export default function Example() {
                           {({ active }) => (
                             <a
                               href={item.href}
-                              onClick={item.onClick}
+                              onClick={() => item.component ? setSelectedNav({ name: item.name, component: item.component }) : item.onClick()}
                               className={classNames(
                                 active ? "bg-gray-50" : "",
                                 "block px-3 py-1 text-sm leading-6 text-gray-900"
