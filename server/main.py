@@ -33,7 +33,8 @@ users = [
         "cameras": [
             {"name": "User1_Camera1", "address": "https://192.168.8.176:8080/video"},
             {"name": "User1_Camera2", "address": "https://192.168.8.177:8080/video"}
-        ]
+        ],
+        "recognized_faces": []  # Add this field to store recognized faces
     },
     {
         "name": "User2",
@@ -43,14 +44,13 @@ users = [
         "cameras": [
             {"name": "User2_Camera1", "address": "https://192.168.8.178:8080/video"},
             {"name": "User2_Camera2", "address": "https://192.168.8.179:8080/video"}
-        ]
+        ],
+        "recognized_faces": []  # Add this field to store recognized faces
     }
 ]
 
-
 # Insert users into the database
 users_collection.insert_many(users)
-
 
 def init_video_captures(user_id):
     global video_captures
@@ -84,20 +84,27 @@ def generate_frames(user_id, camera_address):
             grayscale_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
             faces = face_cascade.detectMultiScale(grayscale_frame, 1.3, 5)
 
-            #save detected face
+            # Save detected face
             for (x, y, w, h) in faces:
-                cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 2)#izrisi kvadrat okrog zaznanega obraza
+                cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 2)  # Draw rectangle around detected face
                 face_image = frame[y:y+h, x:x+w]
                 _, buffer = cv2.imencode('.jpg', face_image)
                 face_image_data = base64.b64encode(buffer).decode('utf-8')
-                faces_collection.insert_one({
+
+                face_document = {
                     "user_id": user_id,
                     "camera_address": camera_address,
                     "timestamp": current_datetime,
                     "image_data": face_image_data
-                })
+                }
 
-            
+                faces_collection.insert_one(face_document)
+                
+                # Add the face to the user's recognized_faces array
+                users_collection.update_one(
+                    {"_id": ObjectId(user_id)},
+                    {"$push": {"recognized_faces": face_document}}
+                )
 
             if not is_recording:
                 is_recording = True
@@ -108,13 +115,6 @@ def generate_frames(user_id, camera_address):
 
             ret, buffer = cv2.imencode('.jpg', frame)
             frame_data_base64 = base64.b64encode(buffer).decode('utf-8')
-            
-            # recordings_collection.insert_one({
-            #     "user_id": user_id,
-            #     "camera_address": camera_address,
-            #     "timestamp": current_datetime,
-            #     "frame_data_base64": frame_data_base64
-            # })
 
             yield (b'--frame\r\n'
                    b'Content-Type: image/jpeg\r\n\r\n' + buffer.tobytes() + b'\r\n')
@@ -225,7 +225,8 @@ def register():
         'cameras': [],
         'email_subscribers': [email],  # Add user's own email to email subscribers
         'phone_subscribers': [],
-        'avatar': 'https://icons.veryicon.com/png/o/internet--web/prejudice/user-128.png'
+        'avatar': 'https://icons.veryicon.com/png/o/internet--web/prejudice/user-128.png',
+        'recognized_faces': []  # Add this field to store recognized faces
     }
 
     users_collection.insert_one(new_user)
@@ -251,7 +252,8 @@ def login():
         "avatar": user.get("avatar", ""),
         "cameras": user.get("cameras", []),
         "email_subscribers": user.get("email_subscribers", [email]),
-        "phone_subscribers": user.get("phone_subscribers", [])
+        "phone_subscribers": user.get("phone_subscribers", []),
+        "recognized_faces": user.get("recognized_faces", [])  # Include recognized faces in the response
     }
 
     # Ensure the user's email is always in the email_subscribers list
@@ -263,6 +265,7 @@ def login():
         user_data["email_subscribers"].append(email)
 
     return jsonify(user_data), 200
+
 
 @app.route('/api/add_email_subscriber', methods=['POST'])
 def add_email_subscriber():
@@ -304,7 +307,6 @@ def add_phone_subscriber():
 
     return jsonify({"message": "Phone subscriber added successfully"}), 200
 
-
 @app.route('/api/update_profile', methods=['POST'])
 def update_profile():
     data = request.get_json()
@@ -342,8 +344,6 @@ def update_profile():
 
     return jsonify(user_data), 200
 
-
-
 @app.route('/api/change_password', methods=['POST'])
 def change_password():
     data = request.get_json()
@@ -363,7 +363,6 @@ def change_password():
 
     return jsonify({"message": "Password updated successfully"}), 200
 
-
 @app.route('/api/delete_account', methods=['POST'])
 def delete_account():
     data = request.get_json()
@@ -378,8 +377,6 @@ def delete_account():
     recordings_collection.delete_many({"user_id": user_id})
 
     return jsonify({"message": "Account deleted successfully"}), 200
-
-
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=6969, debug=True)
