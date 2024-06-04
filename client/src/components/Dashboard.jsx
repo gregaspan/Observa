@@ -34,7 +34,7 @@ function Reports() {
 }
 
 function MotionDetection() {
-  return <div>Motion Detection Content</div>;
+  return <Motion />;
 }
 
 function FacialRecognition() {

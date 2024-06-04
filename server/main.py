@@ -84,9 +84,9 @@ def generate_frames(user_id, camera_address):
             grayscale_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
             faces = face_cascade.detectMultiScale(grayscale_frame, 1.3, 5)
 
-            # Save detected face
+            #save detected face
             for (x, y, w, h) in faces:
-                cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 2)
+                cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 2)#izrisi kvadrat okrog zaznanega obraza
                 face_image = frame[y:y+h, x:x+w]
                 _, buffer = cv2.imencode('.jpg', face_image)
                 face_image_data = base64.b64encode(buffer).decode('utf-8')
@@ -96,6 +96,8 @@ def generate_frames(user_id, camera_address):
                     "timestamp": current_datetime,
                     "image_data": face_image_data
                 })
+
+            
 
             if not is_recording:
                 is_recording = True
@@ -181,11 +183,7 @@ def get_recordings():
 
 @app.route('/api/images', methods=['GET'])
 def get_images():
-    user_id = request.args.get('user_id')
-    if not user_id:
-        return jsonify({"message": "user_id parameter is required"}), 400
-
-    faces = faces_collection.find({"user_id": user_id}).sort("timestamp", -1)
+    faces = faces_collection.find().sort("timestamp", -1)  
     image_list = []
     for face in faces:
         image_list.append({
