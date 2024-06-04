@@ -16,7 +16,9 @@ import {
   BookOpenIcon,
   ChevronDownIcon,
   MagnifyingGlassIcon,
+  ChatBubbleLeftEllipsisIcon, // Import the ChatAltIcon
 } from "@heroicons/react/24/outline";
+
 
 import CamerasGrid from "./CamerasGrid";
 import Faces from "./Faces";
@@ -24,6 +26,7 @@ import Recordings from "./Recordings";
 import Test from "./TestUserCamera";
 import Profile from "./Profile";
 import AddSubscriber from "./AddSubscriber";
+import Chatbot from "./Chatbot";
 
 function Dashboard() {
   return <CamerasGrid />;
@@ -53,6 +56,10 @@ function Documentation() {
   return <Test />;
 }
 
+function Chat() {
+  return <Chatbot />;
+}
+
 const navigation = [
   { name: "Dashboard", component: Dashboard, icon: HomeIcon },
   { name: "Reports", component: Reports, icon: ChartBarIcon },
@@ -66,6 +73,8 @@ const navigation = [
     name: "Email Notifications", component: EmailNotifications, icon: EnvelopeIcon,
   },
   { name: "Documentation", component: Documentation, icon: BookOpenIcon },
+  { name: "Observa Chat", component: Chat, icon: ChatBubbleLeftEllipsisIcon },
+
 ];
 
 const signOut = () => {

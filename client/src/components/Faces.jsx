@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import './styles.css';
 
-function FacialRecognition({ userId }) {
+function FacialRecognition() {
   const [images, setImages] = useState([]);
+  const user = JSON.parse(localStorage.getItem('user'));
+  const userId = user.user_id;
 
   useEffect(() => {
     fetch(`http://127.0.0.1:6969/api/user_faces/${userId}`)
@@ -16,8 +18,8 @@ function FacialRecognition({ userId }) {
       <h1>Facial Recognition Content</h1>
       <div className="image-grid">
         {images.map(image => (
-          <div key={image._id} className="image-item">
-            <img src={`data:image/jpeg;base64,${image.image_data}`} alt={`Captured face ${image._id}`} />
+          <div key={image.id} className="image-item">
+            <img src={`data:image/jpeg;base64,${image.image_data}`} alt={`Captured face ${image.id}`} />
           </div>
         ))}
       </div>
