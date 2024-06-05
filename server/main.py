@@ -8,14 +8,8 @@ from io import BytesIO
 from PIL import Image
 from bson import ObjectId
 from werkzeug.security import generate_password_hash, check_password_hash
-from openai import OpenAI
-
 
 AIKEY = "zu-23f971dd13e55bf7d161d94a5d46840b"
-
-
-
-
 
 app = Flask(__name__)
 CORS(app)
@@ -56,10 +50,8 @@ users = [
     }
 ]
 
-
 # Insert users into the database
 users_collection.insert_many(users)
-
 
 def init_video_captures(user_id):
     global video_captures
@@ -78,7 +70,6 @@ def init_video_captures(user_id):
         video_captures[user_id][camera["address"]] = {"capture": video_capture, "frame_size": frame_size}
         
     return True
-
 
 def generate_frames(user_id, camera_address):
     global video_captures
@@ -137,6 +128,7 @@ def generate_frames(user_id, camera_address):
                 motion_collection.insert_one({
                     "camera_address": camera_address,
                     "timestamp": current_datetime,
+                    "user_id": user_id,  
                     "image_data": motion_image_data
                 })
 
@@ -219,7 +211,8 @@ def get_recordings():
 
 @app.route('/api/images', methods=['GET'])
 def get_images():
-    faces = faces_collection.find().sort("timestamp", -1)  
+    user_id = request.args.get('user_id')
+    faces = faces_collection.find({"user_id": user_id}).sort("timestamp", -1)
     image_list = []
     for face in faces:
         image_list.append({
@@ -227,6 +220,7 @@ def get_images():
             "image_data": face["image_data"]
         })
     return jsonify(image_list), 200
+
 
 @app.route('/display_image/<string:document_id>')
 def display_image(document_id):
@@ -339,7 +333,6 @@ def add_phone_subscriber():
 
     return jsonify({"message": "Phone subscriber added successfully"}), 200
 
-
 @app.route('/api/update_profile', methods=['POST'])
 def update_profile():
     data = request.get_json()
@@ -377,8 +370,6 @@ def update_profile():
 
     return jsonify(user_data), 200
 
-
-
 @app.route('/api/change_password', methods=['POST'])
 def change_password():
     data = request.get_json()
@@ -398,7 +389,6 @@ def change_password():
 
     return jsonify({"message": "Password updated successfully"}), 200
 
-
 @app.route('/api/delete_account', methods=['POST'])
 def delete_account():
     data = request.get_json()
@@ -416,7 +406,8 @@ def delete_account():
 
 @app.route('/api/motion_images', methods=['GET'])
 def get_motion_images():
-    motions = motion_collection.find().sort("timestamp", -1)
+    user_id = request.args.get('user_id')
+    motions = motion_collection.find({"user_id": user_id}).sort("timestamp", -1)
     image_list = []
     for motion in motions:
         image_list.append({
@@ -436,8 +427,6 @@ def get_user_faces(user_id):
         })
     return jsonify(image_list), 200
 
-
-    
 @app.route('/api/chat', methods=['GET', 'POST'])
 def chat():
     data = request.json
@@ -463,8 +452,6 @@ def chat():
     response_data = chat_completion.json()
     print("API Response:", response_data)  # Log the response for debugging
     return jsonify(response_data)
-
-
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=6969, debug=True)

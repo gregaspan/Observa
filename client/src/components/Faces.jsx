@@ -7,11 +7,11 @@ const ImageGallery = () => {
   const userId = user.user_id;
 
   useEffect(() => {
-    fetch('http://127.0.0.1:6969/api/images')
-      .then(response => response.json()) 
-      .then(data => setImages(data)) 
-      .catch(error => console.error('Error fetching images:', error)); // Log any errors to the console
-  }, []); 
+    fetch(`http://127.0.0.1:6969/api/images?user_id=${userId}`)
+      .then(response => response.json())
+      .then(data => setImages(data))
+      .catch(error => console.error('Error fetching images:', error));
+  }, [userId]);
 
   return (
     <div>
