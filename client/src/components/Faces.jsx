@@ -18,8 +18,19 @@ const ImageGallery = () => {
     dropdown.classList.toggle('hidden');
   };
 
-  const handleCopy = (id) => {
-    console.log(`Copy image with id ${id}`);
+  const handleSave = (id) => {
+    fetch(`http://127.0.0.1:6969/display_image/${id}`)
+    .then(response => response.blob())
+    .then(blob => {
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `image_${id}.png`; 
+      a.style.display = 'none';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    })
+    .catch(error => console.error('Error fetching image:', error));
   };
 
   const handleShare = (id) => {
@@ -67,7 +78,7 @@ const ImageGallery = () => {
             <div id={`dropdownDots-${image.id}`} className="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-40 dark:bg-gray-700 dark:divide-gray-600 absolute top-10 right-2">
               <ul className="py-2 text-sm text-gray-700 dark:text-gray-200">
                 <li>
-                  <a href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" onClick={() => handleCopy(image.id)}>Copy</a>
+                  <a href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" onClick={() => handleSave(image.id)}>Save</a>
                 </li>
                 <li>
                   <a href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" onClick={() => handleShare(image.id)}>Share</a>
