@@ -2,13 +2,15 @@ import React, { useState, useEffect } from 'react';
 
 const Motion = () => {
   const [images, setImages] = useState([]);
+  const user = JSON.parse(localStorage.getItem('user'));
+  const userId = user.user_id;
 
   useEffect(() => {
-    fetch('http://127.0.0.1:6969/api/motion_images')
+    fetch(`http://127.0.0.1:6969/api/motion_images?user_id=${userId}`)
       .then(response => response.json())
       .then(data => setImages(data))
       .catch(error => console.error('Error fetching images:', error));
-  }, []);
+  }, [userId]);
 
   return (
     <div>

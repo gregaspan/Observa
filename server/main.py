@@ -416,6 +416,7 @@ def get_motion_images():
         })
     return jsonify(image_list), 200
 
+
 @app.route('/api/user_faces/<string:user_id>', methods=['GET'])
 def get_user_faces(user_id):
     faces = faces_collection.find({'user_id': user_id}).sort("timestamp", -1)
