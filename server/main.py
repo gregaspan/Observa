@@ -462,6 +462,21 @@ def delete_face_image():
     else:
         return jsonify({"message": "Image not found"}), 404
 
+@app.route('/display_motion_image/<string:document_id>')
+def display_motion_image(document_id):
+    document = motion_collection.find_one({'_id': ObjectId(document_id)})
+    if document is None:
+        return jsonify({"message": "Document not found"}), 404
+
+    image_data_base64 = document['image_data']
+    image_data_binary = base64.b64decode(image_data_base64)
+    image = Image.open(BytesIO(image_data_binary))
+    buffered = BytesIO()
+    image.save(buffered, format="JPEG")
+    buffered.seek(0)
+    return send_file(buffered, mimetype='image/jpeg')
+
+
 
 
 @app.route('/api/chat', methods=['GET', 'POST'])
