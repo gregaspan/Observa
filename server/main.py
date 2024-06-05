@@ -8,8 +8,28 @@ from io import BytesIO
 from PIL import Image
 from bson import ObjectId
 from werkzeug.security import generate_password_hash, check_password_hash
+from mailjet_rest import Client
+import os
+
 
 AIKEY = "zu-23f971dd13e55bf7d161d94a5d46840b"
+api_key = ''
+api_secret = ''
+from_email = 'observa564@gmail.com' #na safari je api - mailjet
+
+
+
+
+
+
+
+from_name = 'Observa'
+to_email = ''
+to_name = 'Recipient Name'
+subject = 'Motion Detected🚨'
+text_content = 'This is a test email sent from Mailjet.'
+html_content = '<h3>This is a test email sent from Mailjet.</h3>'
+
 
 app = Flask(__name__)
 CORS(app)
@@ -125,6 +145,14 @@ def generate_frames(user_id, camera_address):
                 motion_image = frame[y:y+h, x:x+w]
                 _, buffer = cv2.imencode('.jpg', motion_image)
                 motion_image_data = base64.b64encode(buffer).decode('utf-8')
+                
+                # Send email with motion detection
+                try:
+                    camera_name = next((camera["name"] for camera in users_collection.find_one({"_id": ObjectId(user_id)})["cameras"] if camera["address"] == camera_address), "Unknown Camera")
+                    send_motion_email(user_id, camera_name, current_datetime, motion_image_data)
+                except Exception as e:
+                    print(f"Error sending email: {e}")
+
                 motion_collection.insert_one({
                     "camera_address": camera_address,
                     "timestamp": current_datetime,
@@ -146,6 +174,8 @@ def generate_frames(user_id, camera_address):
             
             yield (b'--frame\r\n'
                    b'Content-Type: image/jpeg\r\n\r\n' + buffer.tobytes() + b'\r\n')
+
+
 
 @app.route('/camera/<user_id>/<int:camera_id>')
 def index(user_id, camera_id):
@@ -489,6 +519,63 @@ def chat():
     response_data = chat_completion.json()
     print("API Response:", response_data)  
     return jsonify(response_data)
+
+
+def send_email(api_key, api_secret, from_email, from_name, to_email, to_name, subject, text_content, html_content):
+    # Initialize the Mailjet client
+    mailjet = Client(auth=(api_key, api_secret), version='v3.1')
+    
+    # Define the email data
+    data = {
+        'Messages': [
+            {
+                "From": {
+                    "Email": from_email,
+                    "Name": from_name
+                },
+                "To": [
+                    {
+                        "Email": to_email,
+                        "Name": to_name
+                    }
+                ],
+                "Subject": subject,
+                "TextPart": text_content,
+                "HTMLPart": html_content
+            }
+        ]
+    }
+    
+    # Send the email
+    result = mailjet.send.create(data=data)
+    
+    # Check the result
+    if result.status_code == 200:
+        print("Email sent successfully!")
+    else:
+        print(f"Failed to send email. Status code: {result.status_code}")
+        print(result.json())
+
+def send_motion_email(user_id, camera_name, timestamp, motion_image_data):
+    user = users_collection.find_one({"_id": ObjectId(user_id)})
+    if not user:
+        print("User not found")
+        return
+
+    subject = f"Motion detected at {camera_name}"
+    text_content = f"Motion was detected at {camera_name} on {timestamp}."
+    html_content = f"""
+        <h3>Motion detected at {camera_name}</h3>
+        <p>Motion was detected on {timestamp}.</p>
+        <img src="data:image/jpeg;base64,{motion_image_data}" alt="Motion Image" />
+    """
+
+    for subscriber in user.get("email_subscribers", []):
+        send_email(api_key, api_secret, from_email, from_name, subscriber, "Subscriber", subject, text_content, html_content)
+
+
+
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=6969, debug=True)
