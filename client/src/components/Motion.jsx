@@ -23,7 +23,8 @@ const Motion = () => {
 
   const handleShare = (id) => {
     console.log(`Share image with id ${id}`);
-  };
+};
+
 
   const handleDelete = (id) => {
     fetch(`http://127.0.0.1:6969/api/delete_motion_image`, {

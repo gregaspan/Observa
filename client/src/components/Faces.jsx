@@ -27,7 +27,22 @@ const ImageGallery = () => {
   };
 
   const handleDelete = (id) => {
-    console.log(`Delete image with id ${id}`);
+    fetch(`http://127.0.0.1:6969/api/delete_face_image`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ image_id: id, user_id: userId }),
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.message === "Image deleted successfully") {
+        setImages(images.filter(image => image.id !== id));
+      } else {
+        console.error('Error deleting image:', data.message);
+      }
+    })
+    .catch(error => console.error('Error deleting image:', error));
   };
 
   return (

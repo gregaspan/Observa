@@ -417,6 +417,8 @@ def get_motion_images():
     return jsonify(image_list), 200
 
 
+
+
 @app.route('/api/user_faces/<string:user_id>', methods=['GET'])
 def get_user_faces(user_id):
     faces = faces_collection.find({'user_id': user_id}).sort("timestamp", -1)
@@ -443,6 +445,23 @@ def delete_motion_image():
         return jsonify({"message": "Image deleted successfully"}), 200
     else:
         return jsonify({"message": "Image not found"}), 404
+    
+@app.route('/api/delete_face_image', methods=['DELETE'])
+def delete_face_image():
+    data = request.get_json()
+    image_id = data.get('image_id')
+    user_id = data.get('user_id')
+
+    if not image_id or not user_id:
+        return jsonify({"message": "image_id and user_id are required"}), 400
+
+    result = faces_collection.delete_one({"_id": ObjectId(image_id), "user_id": user_id})
+
+    if result.deleted_count == 1:
+        return jsonify({"message": "Image deleted successfully"}), 200
+    else:
+        return jsonify({"message": "Image not found"}), 404
+
 
 
 @app.route('/api/chat', methods=['GET', 'POST'])
@@ -468,7 +487,7 @@ def chat():
     )
 
     response_data = chat_completion.json()
-    print("API Response:", response_data)  # Log the response for debugging
+    print("API Response:", response_data)  
     return jsonify(response_data)
 
 if __name__ == '__main__':
