@@ -89,6 +89,7 @@ def generate_frames(user_id, camera_address):
     frame_size = video_captures[user_id][camera_address]["frame_size"]
 
     last_frame = None 
+    face_counter = 0  
 
     while True:
         success, frame = video_capture.read()
@@ -101,20 +102,21 @@ def generate_frames(user_id, camera_address):
             grayscale_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
             faces = face_cascade.detectMultiScale(grayscale_frame, 1.3, 5)
 
-            #save detected face
             for (x, y, w, h) in faces:
-                cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 2)#narisi kvadrat okrog zaznanega obraza
-                face_image = frame[y:y+h, x:x+w]
-                _, buffer = cv2.imencode('.jpg', face_image)
-                face_image_data = base64.b64encode(buffer).decode('utf-8')
-                faces_collection.insert_one({
-                    "camera_address": camera_address,
-                    "timestamp": current_datetime,
-                    "user_id": user_id,
-                    "image_data": face_image_data
-                })
+                cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 2)  
+                face_counter += 1
+                if face_counter % 5 == 0:  
+                    face_image = frame[y:y+h, x:x+w]
+                    _, buffer = cv2.imencode('.jpg', face_image)
+                    face_image_data = base64.b64encode(buffer).decode('utf-8')
+                    faces_collection.insert_one({
+                        "camera_address": camera_address,
+                        "timestamp": current_datetime,
+                        "user_id": user_id,
+                        "image_data": face_image_data
+                    })
 
-            #motion Detection
+            # Motion Detection
             if last_frame is None:
                 last_frame = grayscale_frame
                 continue
@@ -152,7 +154,6 @@ def generate_frames(user_id, camera_address):
             
             yield (b'--frame\r\n'
                    b'Content-Type: image/jpeg\r\n\r\n' + buffer.tobytes() + b'\r\n')
-
 
 @app.route('/camera/<user_id>/<int:camera_id>')
 def index(user_id, camera_id):
