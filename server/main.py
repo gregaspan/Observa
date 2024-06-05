@@ -8,6 +8,14 @@ from io import BytesIO
 from PIL import Image
 from bson import ObjectId
 from werkzeug.security import generate_password_hash, check_password_hash
+from openai import OpenAI
+
+
+AIKEY = "zu-23f971dd13e55bf7d161d94a5d46840b"
+
+
+
+
 
 app = Flask(__name__)
 CORS(app)
@@ -415,6 +423,46 @@ def get_motion_images():
             "image_data": motion["image_data"]
         })
     return jsonify(image_list), 200
+
+@app.route('/api/user_faces/<string:user_id>', methods=['GET'])
+def get_user_faces(user_id):
+    faces = faces_collection.find({'user_id': user_id}).sort("timestamp", -1)
+    image_list = []
+    for face in faces:
+        image_list.append({
+            "id": str(face["_id"]),
+            "image_data": face["image_data"]
+        })
+    return jsonify(image_list), 200
+
+
+    
+@app.route('/api/chat', methods=['GET', 'POST'])
+def chat():
+    data = request.json
+    question = data.get('question')
+
+    client = OpenAI(
+        api_key=AIKEY,
+        base_url="https://zukijourney.xyzbot.net/v1"
+    )
+
+    chat_completion = client.chat.completions.create(
+        stream=False,
+        model="mistral-medium",
+        response_format={"type": "json_object"},
+        messages=[
+            {
+                "role": "user",
+                "content": f"{question}",
+            },
+        ],
+    )
+
+    response_data = chat_completion.json()
+    print("API Response:", response_data)  # Log the response for debugging
+    return jsonify(response_data)
+
 
 
 if __name__ == '__main__':
