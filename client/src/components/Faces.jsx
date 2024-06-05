@@ -13,13 +13,55 @@ const ImageGallery = () => {
       .catch(error => console.error('Error fetching images:', error));
   }, [userId]);
 
+  const handleDropdownToggle = (id) => {
+    const dropdown = document.getElementById(`dropdownDots-${id}`);
+    dropdown.classList.toggle('hidden');
+  };
+
+  const handleCopy = (id) => {
+    console.log(`Copy image with id ${id}`);
+  };
+
+  const handleShare = (id) => {
+    console.log(`Share image with id ${id}`);
+  };
+
+  const handleDelete = (id) => {
+    console.log(`Delete image with id ${id}`);
+  };
+
   return (
     <div>
       <h1>Facial Recognition Content</h1>
       <div className="image-grid">
         {images.map(image => (
-          <div key={image.id} className="image-item">
-            <img src={`data:image/jpeg;base64,${image.image_data}`} alt={`Captured face ${image.id}`} />
+          <div key={image.id} className="image-item relative">
+            <img src={`data:image/jpeg;base64,${image.image_data}`} alt={`Captured face ${image.id}`} className="rounded-full" />
+            
+            <button
+              id={`dropdownMenuIconButton-${image.id}`}
+              onClick={() => handleDropdownToggle(image.id)}
+              className="absolute top-2 right-2 inline-flex self-center items-center p-2 text-sm font-medium text-center text-gray-900 bg-white rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none dark:text-white focus:ring-gray-50 dark:bg-gray-900 dark:hover:bg-gray-800 dark:focus:ring-gray-600"
+              type="button"
+            >
+              <svg className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 4 15">
+                <path d="M3.5 1.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 6.041a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 5.959a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z"/>
+              </svg>
+            </button>
+
+            <div id={`dropdownDots-${image.id}`} className="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-40 dark:bg-gray-700 dark:divide-gray-600 absolute top-10 right-2">
+              <ul className="py-2 text-sm text-gray-700 dark:text-gray-200">
+                <li>
+                  <a href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" onClick={() => handleCopy(image.id)}>Copy</a>
+                </li>
+                <li>
+                  <a href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" onClick={() => handleShare(image.id)}>Share</a>
+                </li>
+                <li>
+                  <a href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" onClick={() => handleDelete(image.id)}>Delete</a>
+                </li>
+              </ul>
+            </div>
           </div>
         ))}
       </div>

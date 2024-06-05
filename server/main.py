@@ -96,7 +96,7 @@ def generate_frames(user_id, camera_address):
             for (x, y, w, h) in faces:
                 cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 2)  
                 face_counter += 1
-                if face_counter % 5 == 0:  
+                if face_counter % 3 == 0:  
                     face_image = frame[y:y+h, x:x+w]
                     _, buffer = cv2.imencode('.jpg', face_image)
                     face_image_data = base64.b64encode(buffer).decode('utf-8')
