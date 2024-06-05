@@ -24,6 +24,7 @@ import Recordings from "./Recordings";
 import Test from "./TestUserCamera";
 import Profile from "./Profile";
 import AddSubscriber from "./AddSubscriber";
+import Motion from "./Motion";
 
 function Dashboard() {
   return <CamerasGrid />;

@@ -20,6 +20,7 @@ body_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_fullbo
 client = MongoClient('mongodb+srv://admin:adminadmin@cluster0.4v8pcrv.mongodb.net/main?retryWrites=true&w=majority&appName=Cluster0')
 db = client.video_surveillance
 faces_collection = db.detected_faces
+motion_collection = db.detected_motion
 recordings_collection = db.recordings_collection  
 users_collection = db.users 
 
@@ -61,10 +62,15 @@ def init_video_captures(user_id):
     video_captures[user_id] = {}
     for camera in user.get("cameras", []):
         video_capture = cv2.VideoCapture(camera["address"], cv2.CAP_FFMPEG)
+        if not video_capture.isOpened():
+            print(f"Failed to open video capture for {camera['address']}")
+            continue
         video_capture.set(cv2.CAP_PROP_FPS, 28) 
         frame_size = (int(video_capture.get(3)), int(video_capture.get(4)))
         video_captures[user_id][camera["address"]] = {"capture": video_capture, "frame_size": frame_size}
+        
     return True
+
 
 def generate_frames(user_id, camera_address):
     global video_captures
@@ -74,9 +80,12 @@ def generate_frames(user_id, camera_address):
     video_capture = video_captures[user_id][camera_address]["capture"]
     frame_size = video_captures[user_id][camera_address]["frame_size"]
 
+    last_frame = None 
+
     while True:
         success, frame = video_capture.read()
         if not success:
+            print(f"Failed to capture frame from {camera_address}")
             break
         else:
             current_datetime = datetime.datetime.now()
@@ -86,18 +95,42 @@ def generate_frames(user_id, camera_address):
 
             #save detected face
             for (x, y, w, h) in faces:
-                cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 2)#izrisi kvadrat okrog zaznanega obraza
+                cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 2)#narisi kvadrat okrog zaznanega obraza
                 face_image = frame[y:y+h, x:x+w]
                 _, buffer = cv2.imencode('.jpg', face_image)
                 face_image_data = base64.b64encode(buffer).decode('utf-8')
                 faces_collection.insert_one({
-                    "user_id": user_id,
                     "camera_address": camera_address,
                     "timestamp": current_datetime,
+                    "user_id": user_id,
                     "image_data": face_image_data
                 })
 
-            
+            #motion Detection
+            if last_frame is None:
+                last_frame = grayscale_frame
+                continue
+
+            frame_diff = cv2.absdiff(last_frame, grayscale_frame)
+            _, threshold_frame = cv2.threshold(frame_diff, 30, 255, cv2.THRESH_BINARY)
+            dilated_frame = cv2.dilate(threshold_frame, None, iterations=2)
+            contours, _ = cv2.findContours(dilated_frame, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+            for contour in contours:
+                if cv2.contourArea(contour) < 400000:
+                    continue
+                (x, y, w, h) = cv2.boundingRect(contour)
+                cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
+                motion_image = frame[y:y+h, x:x+w]
+                _, buffer = cv2.imencode('.jpg', motion_image)
+                motion_image_data = base64.b64encode(buffer).decode('utf-8')
+                motion_collection.insert_one({
+                    "camera_address": camera_address,
+                    "timestamp": current_datetime,
+                    "image_data": motion_image_data
+                })
+
+            last_frame = grayscale_frame 
 
             if not is_recording:
                 is_recording = True
@@ -109,15 +142,9 @@ def generate_frames(user_id, camera_address):
             ret, buffer = cv2.imencode('.jpg', frame)
             frame_data_base64 = base64.b64encode(buffer).decode('utf-8')
             
-            # recordings_collection.insert_one({
-            #     "user_id": user_id,
-            #     "camera_address": camera_address,
-            #     "timestamp": current_datetime,
-            #     "frame_data_base64": frame_data_base64
-            # })
-
             yield (b'--frame\r\n'
                    b'Content-Type: image/jpeg\r\n\r\n' + buffer.tobytes() + b'\r\n')
+
 
 @app.route('/camera/<user_id>/<int:camera_id>')
 def index(user_id, camera_id):
@@ -223,7 +250,7 @@ def register():
         'email': email,
         'password': hashed_password,
         'cameras': [],
-        'email_subscribers': [email],  # Add user's own email to email subscribers
+        'email_subscribers': [email],  
         'phone_subscribers': [],
         'avatar': 'https://icons.veryicon.com/png/o/internet--web/prejudice/user-128.png'
     }
@@ -242,7 +269,7 @@ def login():
     if not user or not check_password_hash(user['password'], password):
         return jsonify({"message": "Invalid email or password"}), 400
 
-    # Include all relevant user data
+ 
     user_data = {
         "message": "Login successful",
         "user_id": str(user["_id"]),
@@ -254,7 +281,6 @@ def login():
         "phone_subscribers": user.get("phone_subscribers", [])
     }
 
-    # Ensure the user's email is always in the email_subscribers list
     if email not in user_data["email_subscribers"]:
         users_collection.update_one(
             {"_id": user["_id"]},
@@ -379,6 +405,16 @@ def delete_account():
 
     return jsonify({"message": "Account deleted successfully"}), 200
 
+@app.route('/api/motion_images', methods=['GET'])
+def get_motion_images():
+    motions = motion_collection.find().sort("timestamp", -1)
+    image_list = []
+    for motion in motions:
+        image_list.append({
+            "id": str(motion["_id"]),
+            "image_data": motion["image_data"]
+        })
+    return jsonify(image_list), 200
 
 
 if __name__ == '__main__':

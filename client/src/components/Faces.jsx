@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 
-const ImageGallery = () => {
+const ImageGallery = ({ userId }) => {
   const [images, setImages] = useState([]);
 
   useEffect(() => {
-    fetch('http://127.0.0.1:6969/api/images')
-      .then(response => response.json()) 
-      .then(data => setImages(data)) 
-      .catch(error => console.error('Error fetching images:', error)); // Log any errors to the console
-  }, []); 
+    fetch(`http://127.0.0.1:6969/api/images?user_id=${userId}`)
+      .then(response => response.json())
+      .then(data => setImages(data))
+      .catch(error => console.error('Error fetching images:', error));
+  }, [userId]);
 
   return (
     <div>
@@ -25,3 +25,4 @@ const ImageGallery = () => {
 };
 
 export default ImageGallery;
+
