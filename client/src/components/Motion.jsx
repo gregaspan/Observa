@@ -81,7 +81,7 @@ const Motion = () => {
             <div id={`dropdownDots-${image.id}`} className="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-40 dark:bg-gray-700 dark:divide-gray-600 absolute top-10 right-2">
               <ul className="py-2 text-sm text-gray-700 dark:text-gray-200">
                 <li>
-                  <button className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" onClick={() => handleSave(image.id)}>Save</button>
+                  <button className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" onClick={() => handleSave(image.id)}>Download</button>
                 </li>
                 <li>
                   <button className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" onClick={() => handleShare(image.id)}>Share</button>
