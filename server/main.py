@@ -10,13 +10,15 @@ from bson import ObjectId
 from werkzeug.security import generate_password_hash, check_password_hash
 from mailjet_rest import Client
 import os
+import requests
+
 
 
 AIKEY = "zu-23f971dd13e55bf7d161d94a5d46840b"
 api_key = ''
 api_secret = ''
 from_email = 'observa564@gmail.com' #na safari je api - mailjet
-
+seven_io_api_key = ''
 
 
 
@@ -72,6 +74,20 @@ users = [
 
 # Insert users into the database
 users_collection.insert_many(users)
+
+def send_sms(api_key, phone_number, message):
+    url = "https://gateway.seven.io/api/sms"
+    payload = {
+        'text': message,
+        'to': phone_number,
+        'from': 'Observa'
+    }
+    headers = {
+        'Authorization': f'Bearer {api_key}'
+    }
+    response = requests.post(url, data=payload, headers=headers)
+    return response
+
 
 def init_video_captures(user_id):
     global video_captures
@@ -361,7 +377,14 @@ def add_phone_subscriber():
         {"$addToSet": {"phone_subscribers": phone_subscriber}}
     )
 
-    return jsonify({"message": "Phone subscriber added successfully"}), 200
+    # Send SMS to the new phone subscriber
+    message = "👀"
+    sms_response = send_sms(seven_io_api_key, phone_subscriber, message)
+    
+    if sms_response.status_code == 200:
+        return jsonify({"message": "Phone subscriber added and SMS sent successfully"}), 200
+    else:
+        return jsonify({"message": "Phone subscriber added but failed to send SMS", "error": sms_response.json()}), 200
 
 @app.route('/api/remove_email_subscriber', methods=['POST'])
 def remove_email_subscriber():
