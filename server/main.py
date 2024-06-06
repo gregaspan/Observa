@@ -363,6 +363,47 @@ def add_phone_subscriber():
 
     return jsonify({"message": "Phone subscriber added successfully"}), 200
 
+@app.route('/api/remove_email_subscriber', methods=['POST'])
+def remove_email_subscriber():
+    data = request.get_json()
+    user_id = data.get('user_id')
+    email_subscriber = data.get('email_subscriber')
+
+    if not user_id or not email_subscriber:
+        return jsonify({"message": "user_id and email_subscriber are required"}), 400
+
+    user = users_collection.find_one({"_id": ObjectId(user_id)})
+    if not user:
+        return jsonify({"message": "User not found"}), 404
+
+    users_collection.update_one(
+        {"_id": ObjectId(user_id)},
+        {"$pull": {"email_subscribers": email_subscriber}}
+    )
+
+    return jsonify({"message": "Email subscriber removed successfully"}), 200
+
+@app.route('/api/remove_phone_subscriber', methods=['POST'])
+def remove_phone_subscriber():
+    data = request.get_json()
+    user_id = data.get('user_id')
+    phone_subscriber = data.get('phone_subscriber')
+
+    if not user_id or not phone_subscriber:
+        return jsonify({"message": "user_id and phone_subscriber are required"}), 400
+
+    user = users_collection.find_one({"_id": ObjectId(user_id)})
+    if not user:
+        return jsonify({"message": "User not found"}), 404
+
+    users_collection.update_one(
+        {"_id": ObjectId(user_id)},
+        {"$pull": {"phone_subscribers": phone_subscriber}}
+    )
+
+    return jsonify({"message": "Phone subscriber removed successfully"}), 200
+
+
 @app.route('/api/update_profile', methods=['POST'])
 def update_profile():
     data = request.get_json()

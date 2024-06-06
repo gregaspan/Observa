@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import AddSubscriber from './AddSubscriber';
 
 const AccountSettings = () => {
   const [user, setUser] = useState({ user_id: '', name: '', email: '', avatar: '' });
@@ -193,6 +194,8 @@ const AccountSettings = () => {
           </div>
         </form>
       </div>
+
+      <AddSubscriber />
 
       {/* Change Password Section */}
       <div className="grid max-w-7xl grid-cols-1 gap-x-8 gap-y-10 px-4 py-16 sm:px-6 md:grid-cols-3 lg:px-8">
