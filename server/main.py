@@ -10,8 +10,9 @@ from bson import ObjectId
 from werkzeug.security import generate_password_hash, check_password_hash
 from mailjet_rest import Client
 import os
+import requests
 
-
+SEVEN_IO_API_KEY = '' #seven.io api key
 AIKEY = "zu-23f971dd13e55bf7d161d94a5d46840b"
 api_key = ''
 api_secret = ''
@@ -343,6 +344,8 @@ def add_email_subscriber():
 
     return jsonify({"message": "Email subscriber added successfully"}), 200
 
+
+
 @app.route('/api/add_phone_subscriber', methods=['POST'])
 def add_phone_subscriber():
     data = request.get_json()
@@ -361,7 +364,32 @@ def add_phone_subscriber():
         {"$addToSet": {"phone_subscribers": phone_subscriber}}
     )
 
+    # Send SMS using Seven.io
+    send_sms(phone_subscriber, "👀")
+
     return jsonify({"message": "Phone subscriber added successfully"}), 200
+
+def send_sms(phone_number, message):
+    url = 'https://gateway.seven.io/api/sms'
+    params = {
+        'p': SEVEN_IO_API_KEY,
+        'to': phone_number,
+        'text': message,
+        'from': "Observa"
+
+        
+    }
+    response = requests.get(url, params=params)
+    
+    if response.status_code == 200:
+        print("SMS sent successfully!")
+    else:
+        print(f"Failed to send SMS. Status code: {response.status_code}")
+        print(response.json())
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=6969, debug=True)
+
 
 @app.route('/api/update_profile', methods=['POST'])
 def update_profile():
