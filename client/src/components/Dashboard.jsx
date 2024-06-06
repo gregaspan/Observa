@@ -28,13 +28,14 @@ import Profile from "./Profile";
 import AddSubscriber from "./AddSubscriber";
 import Chatbot from "./Chatbot";
 import Motion from "./Motion";
+import Report from "./Reports";
 
 function Dashboard() {
   return <CamerasGrid />;
 }
 
 function Reports() {
-  return <div>Reports Content</div>;
+  return <Report />;
 }
 
 function MotionDetection() {
