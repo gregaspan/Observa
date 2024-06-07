@@ -33,6 +33,9 @@ const ImageGallery = () => {
     .catch(error => console.error('Error fetching image:', error));
   };
 
+  const handleShare = (id) => {
+    console.log(`Share image with id ${id}`);
+  };
 
   const handleDelete = (id) => {
     fetch(`http://127.0.0.1:6969/api/delete_face_image`, {
@@ -76,6 +79,9 @@ const ImageGallery = () => {
               <ul className="py-2 text-sm text-gray-700 dark:text-gray-200">
                 <li>
                   <a href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" onClick={() => handleSave(image.id)}>Download</a>
+                </li>
+                <li>
+                  <a href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" onClick={() => handleShare(image.id)}>Share</a>
                 </li>
                 <li>
                   <a href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" onClick={() => handleDelete(image.id)}>Delete</a>
