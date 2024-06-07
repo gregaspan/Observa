@@ -3,6 +3,7 @@ import boto3
 BUCKET_NAME = "moj-test-bucket"
 S3_BASE_URL = f'https://{BUCKET_NAME}.s3.amazonaws.com/'
 
+
 def upload_file(file_name, bucket):
     object_name = file_name
     s3_client = boto3.client('s3')

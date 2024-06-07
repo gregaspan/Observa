@@ -148,7 +148,6 @@ def generate_frames(user_id, camera_address):
                         "image_data": face_image_data
                     })
 
-            # Motion Detection
             if last_frame is None:
                 last_frame = grayscale_frame
                 continue
@@ -168,14 +167,15 @@ def generate_frames(user_id, camera_address):
                 _, buffer = cv2.imencode('.jpg', motion_image)
                 motion_image_data = base64.b64encode(buffer).decode('utf-8')
 
-                # Send email with motion detection
-                try:
-                    camera_name = next(
-                        (camera["name"] for camera in users_collection.find_one({"_id": ObjectId(user_id)})["cameras"]
-                         if camera["address"] == camera_address), "Unknown Camera")
-                    send_motion_email(user_id, camera_name, current_datetime, motion_image_data)
-                except Exception as e:
-                    print(f"Error sending email: {e}")
+               # try:
+               #     camera_name = next(
+               #         (camera["name"] for camera in users_collection.find_one({"_id": ObjectId(user_id)})["cameras"]
+               #          if camera["address"] == camera_address), "Unknown Camera")
+               #     send_motion_email(user_id, camera_name, current_datetime, motion_image_data)
+               # except Exception as e:
+               #     print(f"Error sending email: {e}")
+
+                print("Tu sem 1")
 
                 motion_collection.insert_one({
                     "camera_address": camera_address,
@@ -185,18 +185,26 @@ def generate_frames(user_id, camera_address):
                 })
                 motion_detected = True
 
+                print("Tu sem 2")
+
             last_frame = grayscale_frame
 
             if motion_detected and not is_recording:
+                print("sem tu not 3")
                 is_recording = True
                 recording_start_time = datetime.datetime.now()
 
-                # Create a video writer object
+                if not os.path.exists(UPLOAD_FOLDER):
+                    os.makedirs(UPLOAD_FOLDER)
                 fourcc = cv2.VideoWriter_fourcc(*'XVID')
                 video_filename = os.path.join(UPLOAD_FOLDER, f"{recording_start_time.strftime('%Y%m%d_%H%M%S')}.avi")
+                # Ensure the path uses forward slashes
+                video_filename = video_filename.replace("\\", "/")
+                print("Filename is: " + video_filename)
                 video_writer = cv2.VideoWriter(video_filename, fourcc, 20.0, frame_size)
 
             if is_recording:
+                print("Sem tu not 4")
                 video_writer.write(frame)
                 elapsed_time = (datetime.datetime.now() - recording_start_time).total_seconds()
                 if elapsed_time >= SECONDS_TO_RECORD:
@@ -204,13 +212,16 @@ def generate_frames(user_id, camera_address):
                     video_writer.release()
                     video_writer = None
 
-                    # Upload the video to S3
-                    print("Uploading to S3")
-                    upload_file(video_filename, BUCKET)
-                    print("Uploaded!")
+                    try:
+                        upload_file(video_filename, BUCKET)
+                        os.remove(video_filename)
+                    except Exception as e:
+                        print(f"Error uploading file to S3: {e}")
 
             ret, buffer = cv2.imencode('.jpg', frame)
             frame_data_base64 = base64.b64encode(buffer).decode('utf-8')
+
+            print("Na koncu sem")
 
             yield (b'--frame\r\n'
                    b'Content-Type: image/jpeg\r\n\r\n' + buffer.tobytes() + b'\r\n')
