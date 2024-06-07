@@ -2,12 +2,9 @@ import React, { useEffect, useState } from 'react';
 import Chart from 'chart.js/auto';
 import 'tailwindcss/tailwind.css';
 
-// Define the Reports component
 const Reports = () => {
-  // State to store user data from localStorage
   const [user, setUser] = useState(null);
 
-  // Fetch user data from localStorage on component mount
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem('user'));
     if (storedUser) {
@@ -15,21 +12,14 @@ const Reports = () => {
     }
   }, []);
 
-  // Set up charts when user data is available
   useEffect(() => {
     if (user) {
-      // Extract camera names for chart labels
       const cameraNames = user.cameras.map(camera => camera.name);
-
-      // Dummy data for events detected by each camera
       const eventCounts = user.cameras.map(() => Math.floor(Math.random() * 100));
-
-      // Dummy data for event types detected (face, motion, unknown)
       const faceEvents = user.cameras.map(() => Math.floor(Math.random() * 50));
       const motionEvents = user.cameras.map(() => Math.floor(Math.random() * 50));
       const unknownEvents = user.cameras.map(() => Math.floor(Math.random() * 20));
 
-      // Create a bar chart for events detected by each camera
       const ctx1 = document.getElementById('eventsChart').getContext('2d');
       new Chart(ctx1, {
         type: 'bar',
@@ -52,7 +42,6 @@ const Reports = () => {
         }
       });
 
-      // Create a stacked bar chart for types of events detected by each camera
       const ctx2 = document.getElementById('eventTypesChart').getContext('2d');
       new Chart(ctx2, {
         type: 'bar',
@@ -97,11 +86,9 @@ const Reports = () => {
         }
       });
 
-      // Dummy data for daily events detected over a week
       const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
       const dailyEvents = days.map(() => Math.floor(Math.random() * 50));
 
-      // Create a line chart for daily events detected
       const ctx3 = document.getElementById('dailyEventsChart').getContext('2d');
       new Chart(ctx3, {
         type: 'line',
@@ -126,35 +113,44 @@ const Reports = () => {
     }
   }, [user]);
 
-  // Render the component
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-3xl font-bold mb-4">User Report</h1>
-      {user ? (
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <div className="flex items-center mb-4">
-            <img src={user.avatar} alt="User Avatar" className="w-16 h-16 rounded-full mr-4" />
-            <div>
-              <h2 className="text-2xl font-bold">{user.name}</h2>
-              <p className="text-gray-600">{user.email}</p>
+    <div className="divide-y divide-gray-200">
+      {/* User Information Section */}
+      <div className="grid max-w-7xl grid-cols-1 gap-x-8 gap-y-10 px-4 py-16 sm:px-6 lg:px-8">
+        {user ? (
+          <>
+            <div className="md:col-span-3 bg-white p-6 rounded-lg shadow-md">
+              <div className="flex items-center mb-4">
+                <img src={user.avatar} alt="User Avatar" className="w-16 h-16 rounded-full mr-4" />
+                <div>
+                  <h2 className="text-2xl font-bold">{user.name}</h2>
+                  <p className="text-gray-600">{user.email}</p>
+                </div>
+              </div>
             </div>
-          </div>
-          <div className="mb-8">
-            <h3 className="text-xl font-semibold mb-2">Events Detected by Each Camera</h3>
-            <canvas id="eventsChart" width="400" height="200"></canvas>
-          </div>
-          <div className="mb-8">
-            <h3 className="text-xl font-semibold mb-2">Types of Events Detected</h3>
-            <canvas id="eventTypesChart" width="400" height="200"></canvas>
-          </div>
-          <div className="mb-8">
-            <h3 className="text-xl font-semibold mb-2">Daily Events Detected</h3>
-            <canvas id="dailyEventsChart" width="400" height="200"></canvas>
-          </div>
-        </div>
-      ) : (
-        <p>Loading...</p>
-      )}
+
+            {/* Events Detected by Each Camera Section */}
+            <div className="md:col-span-3 bg-white p-6 rounded-lg shadow-md">
+              <h3 className="text-xl font-semibold mb-2">Events Detected by Each Camera</h3>
+              <canvas id="eventsChart" width="400" height="200"></canvas>
+            </div>
+
+            {/* Types of Events Detected Section */}
+            <div className="md:col-span-3 bg-white p-6 rounded-lg shadow-md">
+              <h3 className="text-xl font-semibold mb-2">Types of Events Detected</h3>
+              <canvas id="eventTypesChart" width="400" height="200"></canvas>
+            </div>
+
+            {/* Daily Events Detected Section */}
+            <div className="md:col-span-3 bg-white p-6 rounded-lg shadow-md">
+              <h3 className="text-xl font-semibold mb-2">Daily Events Detected</h3>
+              <canvas id="dailyEventsChart" width="400" height="200"></canvas>
+            </div>
+          </>
+        ) : (
+          <p className="md:col-span-3 text-center">Loading...</p>
+        )}
+      </div>
     </div>
   );
 };
