@@ -1,8 +1,6 @@
-import React, { useEffect } from 'react';
-import './styles.css';
-
-import { Fragment, useState } from 'react';
-import { Dialog, Menu, Transition } from '@headlessui/react';
+import React, { useEffect, useState, Fragment } from "react";
+import "./styles.css";
+import { Dialog, Menu, Transition } from "@headlessui/react";
 import {
   Bars3Icon,
   BellIcon,
@@ -16,20 +14,28 @@ import {
   ShareIcon,
   EnvelopeIcon,
   BookOpenIcon,
-} from '@heroicons/react/24/outline';
-import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid';
+  ChevronDownIcon,
+  MagnifyingGlassIcon,
+  ChatBubbleLeftEllipsisIcon, // Import the ChatAltIcon
+} from "@heroicons/react/24/outline";
 
-import CamerasGrid from './CamerasGrid';
-import Faces from './Faces';
-import Recordings from './Recordings';
-import Motion from './Motion';
+
+import CamerasGrid from "./CamerasGrid";
+import Faces from "./Faces";
+import Recordings from "./Recordings";
+import Test from "./TestUserCamera";
+import Profile from "./Profile";
+import AddSubscriber from "./AddSubscriber";
+import Chatbot from "./Chatbot";
+import Motion from "./Motion";
+import Report from "./Reports";
 
 function Dashboard() {
   return <CamerasGrid />;
 }
 
 function Reports() {
-  return <div>Reports Content</div>;
+  return <Report />;
 }
 
 function MotionDetection() {
@@ -45,38 +51,43 @@ function VideoPlayback() {
   return <Recordings />;
 }
 
-function VideoSharing() {
-  return <div>Video Sharing Content</div>;
-}
-
 function EmailNotifications() {
-  return <div>Email Notifications Content</div>;
+  return <AddSubscriber />;
 }
 
 function Documentation() {
-  return <div>Documentation Content</div>;
+  return <Test />;
+}
+
+function Chat() {
+  return <Chatbot />;
 }
 
 const navigation = [
-  { name: 'Dashboard', component: Dashboard, icon: HomeIcon },
-  { name: 'Reports', component: Reports, icon: ChartBarIcon },
-  { name: 'Motion Detection', component: MotionDetection, icon: EyeIcon },
-  { name: 'Facial Recognition', component: FacialRecognition, icon: UserCircleIcon },
-  { name: 'Video Playback', component: VideoPlayback, icon: PlayCircleIcon },
-  { name: 'Video Sharing', component: VideoSharing, icon: ShareIcon },
-  { name: 'Email Notifications', component: EmailNotifications, icon: EnvelopeIcon },
-  { name: 'Documentation', component: Documentation, icon: BookOpenIcon },
+  { name: "Dashboard", component: Dashboard, icon: HomeIcon },
+  { name: "Reports", component: Reports, icon: ChartBarIcon },
+  { name: "Motion Detection", component: MotionDetection, icon: EyeIcon },
+  {
+    name: "Facial Recognition",
+    component: FacialRecognition, icon: UserCircleIcon,
+  },
+  { name: "Video Playback", component: VideoPlayback, icon: PlayCircleIcon },
+  {
+    name: "Email Notifications", component: EmailNotifications, icon: EnvelopeIcon,
+  },
+  { name: "Documentation", component: Documentation, icon: BookOpenIcon },
+  { name: "Observa Chat", component: Chat, icon: ChatBubbleLeftEllipsisIcon },
+
 ];
 
-const teams = [
-  { id: 1, name: 'Heroicons', href: '#', initial: 'H', current: false },
-  { id: 2, name: 'Tailwind Labs', href: '#', initial: 'T', current: false },
-  { id: 3, name: 'Workcation', href: '#', initial: 'W', current: false },
-];
+const signOut = () => {
+  localStorage.removeItem('user');
+  window.location.href = '/'; // Redirect to login page
+};
 
 const userNavigation = [
-  { name: 'Your profile', href: '#' },
-  { name: 'Sign out', href: '#' },
+  { name: "Your profile", href: "#", component: Profile },
+  { name: "Sign out", href: "#", onClick: signOut },
 ];
 
 function classNames(...classes) {
@@ -301,17 +312,18 @@ export default function Example() {
                   </ul>
                 </li>
                 <li className="mt-auto">
-                  <a
-                    href="#"
-                    className="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-indigo-200 hover:bg-indigo-700 hover:text-white"
-                  >
-                    <Cog6ToothIcon
-                      className="h-6 w-6 shrink-0 text-indigo-200 group-hover:text-white"
-                      aria-hidden="true"
-                    />
-                    Settings
-                  </a>
-                </li>
+  <button
+    onClick={() => handleNavClick({ name: "Your profile", component: Profile })}
+    className="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-indigo-200 hover:bg-indigo-700 hover:text-white"
+  >
+    <Cog6ToothIcon
+      className="h-6 w-6 shrink-0 text-indigo-200 group-hover:text-white"
+      aria-hidden="true"
+    />
+    Settings
+  </button>
+</li>
+
               </ul>
             </nav>
           </div>
@@ -356,7 +368,7 @@ export default function Example() {
                     <span className="sr-only">Open user menu</span>
                     <img
                       className="h-8 w-8 rounded-full bg-gray-50"
-                      src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                      src={user.avatar}
                       alt=""
                     />
                     <span className="hidden lg:flex lg:items-center">
@@ -381,6 +393,7 @@ export default function Example() {
                           {({ active }) => (
                             <a
                               href={item.href}
+                              onClick={() => item.component ? setSelectedNav({ name: item.name, component: item.component }) : item.onClick()}
                               className={classNames(
                                 active ? 'bg-gray-50' : '',
                                 'block px-3 py-1 text-sm leading-6 text-gray-900'

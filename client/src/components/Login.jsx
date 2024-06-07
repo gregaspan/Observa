@@ -17,7 +17,11 @@ export default function LoginPage() {
     });
 
     if (response.ok) {
-      alert('Login successful');
+      const result = await response.json();
+
+      // Store user data in local storage
+      localStorage.setItem('user', JSON.stringify(result));
+      window.location.href = '/dashboard';
     } else {
       const result = await response.json();
       alert(`Login failed: ${result.message}`);
