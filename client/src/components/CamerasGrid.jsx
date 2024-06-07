@@ -69,55 +69,115 @@ const App = () => {
         setSelectedCamera(camera);
     };
 
+    const closeQuickView = () => {
+        setSelectedCamera(null);
+    };
+
     return (
-        <div className="min-h-screen bg-gray-100 p-8">
-            <h1 className="text-3xl font-bold mb-8">IP Camera Stream</h1>
-            <div className="mb-4">
-                <input
-                    type="text"
-                    className="border rounded px-4 py-2 mr-2"
-                    value={newCameraName}
-                    onChange={(e) => setNewCameraName(e.target.value)}
-                    placeholder="Enter camera name"
-                />
-                <input
-                    type="text"
-                    className="border rounded px-4 py-2 mr-2"
-                    value={newCameraAddress}
-                    onChange={(e) => setNewCameraAddress(e.target.value)}
-                    placeholder="Enter camera address"
-                />
-                <button
-                    className="bg-blue-500 text-white px-4 py-2 rounded"
-                    onClick={addCamera}
-                >
-                    Add Camera
-                </button>
+        <div className="divide-y divide-gray-200">
+            {/* Add Camera Section */}
+            <div className="grid max-w-7xl grid-cols-1 gap-x-8 gap-y-10 px-4 py-16 sm:px-6 md:grid-cols-3 lg:px-8">
+                <div>
+                    <h2 className="text-base font-semibold leading-7 text-gray-900">Add Camera</h2>
+                    <p className="mt-1 text-sm leading-6 text-gray-600">
+                        Enter the name and address of the camera you want to add.
+                    </p>
+                </div>
+
+                <form className="md:col-span-2" onSubmit={addCamera}>
+                    <div className="grid grid-cols-1 gap-x-6 gap-y-8 sm:max-w-xl sm:grid-cols-6">
+                        <div className="col-span-full">
+                            <label htmlFor="cameraName" className="block text-sm font-medium leading-6 text-gray-900">
+                                Camera Name
+                            </label>
+                            <div className="mt-2">
+                                <input
+                                    id="cameraName"
+                                    name="cameraName"
+                                    type="text"
+                                    value={newCameraName}
+                                    onChange={(e) => setNewCameraName(e.target.value)}
+                                    required
+                                    className="block w-full rounded-md border-0 bg-gray-50 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
+                                />
+                            </div>
+                        </div>
+                        <div className="col-span-full">
+                            <label htmlFor="cameraAddress" className="block text-sm font-medium leading-6 text-gray-900">
+                                Camera Address
+                            </label>
+                            <div className="mt-2">
+                                <input
+                                    id="cameraAddress"
+                                    name="cameraAddress"
+                                    type="text"
+                                    value={newCameraAddress}
+                                    onChange={(e) => setNewCameraAddress(e.target.value)}
+                                    required
+                                    className="block w-full rounded-md border-0 bg-gray-50 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
+                                />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="mt-8 flex">
+                        <button
+                            type="submit"
+                            className="rounded-md bg-indigo-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
+                        >
+                            Add Camera
+                        </button>
+                    </div>
+                </form>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                {cameras.map((camera, index) => (
-                    <CameraTile
-                        key={index}
-                        camera={camera}
-                        image={cameraImages[camera.name]}
-                        onClick={handleTileClick}
-                    />
-                ))}
+
+            {/* Cameras List Section */}
+            <div className="max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+                <div>
+                    <h2 className="text-base font-semibold leading-7 text-gray-900">Cameras List</h2>
+                    <p className="mt-1 text-sm leading-6 text-gray-600">
+                        List of all added cameras.
+                    </p>
+                </div>
+                <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    {cameras.map((camera, index) => (
+                        <CameraTile
+                            key={index}
+                            camera={camera}
+                            image={cameraImages[camera.name]}
+                            onClick={() => handleTileClick(camera)}
+                        />
+                    ))}
+                </div>
             </div>
+
+            {/* Quick View Modal */}
             {selectedCamera && (
-                <div className="mt-8">
-                    <h2 className="text-2xl font-bold mb-4">{selectedCamera.name}</h2>
-                    <img
-                        src={`http://127.0.0.1:6969/camera/${userId}/${cameras.indexOf(selectedCamera)}`}
-                        alt={`${selectedCamera.name} Feed`}
-                        className="w-full max-w-lg"
-                    />
-                    <button
-                        className="bg-red-500 text-white px-4 py-2 rounded mt-4"
-                        onClick={() => removeCamera(selectedCamera.address)}
-                    >
-                        Remove Camera
-                    </button>
+                <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center">
+                    <div className="bg-white rounded-lg p-8 max-w-lg w-full">
+                        <div className="flex justify-between items-center mb-4">
+                            <h2 className="text-2xl font-bold">{selectedCamera.name}</h2>
+                            <button className="text-gray-500 hover:text-gray-700" onClick={closeQuickView}>
+                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+                                </svg>
+                            </button>
+                        </div>
+                        <img
+                            src={`http://127.0.0.1:6969/camera/${userId}/${cameras.indexOf(selectedCamera)}`}
+                            alt={`${selectedCamera.name} Feed`}
+                            className="w-full"
+                        />
+                        <button
+                            className="bg-red-500 text-white px-4 py-2 rounded mt-4 w-full"
+                            onClick={() => {
+                                removeCamera(selectedCamera.address);
+                                closeQuickView();
+                            }}
+                        >
+                            Remove Camera
+                        </button>
+                    </div>
                 </div>
             )}
         </div>
