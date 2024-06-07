@@ -1,7 +1,6 @@
 import cv2
 import datetime
-from flask import Flask, Response, jsonify, request
-import os
+from flask import Flask, Response, jsonify, request, send_file
 from flask_cors import CORS
 from pymongo import MongoClient
 import base64
@@ -38,7 +37,6 @@ app = Flask(__name__)
 CORS(app)
 
 video_captures = {}
-cameras = [{"name": "Camera 1", "address": "https://164.8.113.108:8080/video"}]
 
 face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
 body_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_fullbody.xml")
@@ -91,7 +89,7 @@ def send_sms(api_key, phone_number, message):
     return response
 
 
-def init_video_captures():
+def init_video_captures(user_id):
     global video_captures
     user = users_collection.find_one({"_id": ObjectId(user_id)})
     if not user:
@@ -109,10 +107,9 @@ def init_video_captures():
         
     return True
 
-def generate_frames(camera_address):
+def generate_frames(user_id, camera_address):
     global video_captures
     is_recording = False
-    video_writer = None
     recording_start_time = None
     SECONDS_TO_RECORD = 3
     video_capture = video_captures[user_id][camera_address]["capture"]
@@ -127,10 +124,10 @@ def generate_frames(camera_address):
             print(f"Failed to capture frame from {camera_address}")
             break
         else:
-            current_datetime = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+            current_datetime = datetime.datetime.now()
+
             grayscale_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
             faces = face_cascade.detectMultiScale(grayscale_frame, 1.3, 5)
-            bodies = body_cascade.detectMultiScale(grayscale_frame, 1.3, 5)
 
             for (x, y, w, h) in faces:
                 cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 2)  
@@ -185,17 +182,14 @@ def generate_frames(camera_address):
                 is_recording = True
                 recording_start_time = datetime.datetime.now()
 
-            if is_recording:
-                video_writer.write(frame)
-                if (datetime.datetime.now() - recording_start_time).total_seconds() >= SECONDS_TO_RECORD:
-                    is_recording = False
-                    video_writer.release()
+            if (datetime.datetime.now() - recording_start_time).total_seconds() >= SECONDS_TO_RECORD:
+                is_recording = False
 
             ret, buffer = cv2.imencode('.jpg', frame)
             frame_data_base64 = base64.b64encode(buffer).decode('utf-8')
             
             yield (b'--frame\r\n'
-                   b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+                   b'Content-Type: image/jpeg\r\n\r\n' + buffer.tobytes() + b'\r\n')
 
 
 
@@ -206,31 +200,33 @@ def index(user_id, camera_id):
     user = users_collection.find_one({"_id": ObjectId(user_id)})
     if not user or camera_id < 0 or camera_id >= len(user["cameras"]):
         return "Camera not found", 404
-    return Response(generate_frames(cameras[camera_id]["address"]), mimetype='multipart/x-mixed-replace; boundary=frame')
+    return Response(generate_frames(user_id, user["cameras"][camera_id]["address"]), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 @app.route('/api/add_camera', methods=['POST'])
 def add_camera():
-    data = request.json
-    name = data.get('name')
-    address = data.get('address')
-    if name and address:
-        cameras.append({"name": name, "address": address})
-        video_capture = cv2.VideoCapture(address)
-        video_capture.set(cv2.CAP_PROP_FPS, 28)
-        frame_size = (int(video_capture.get(3)), int(video_capture.get(4)))
-        video_captures[address] = {"capture": video_capture, "frame_size": frame_size}
-        return jsonify({"message": "Camera added successfully"}), 201
-    return jsonify({"message": "Invalid name or address"}), 400
+    user_id = request.json.get('user_id')
+    name = request.json.get('name')
+    address = request.json.get('address')
+    if user_id and name and address:
+        user = users_collection.find_one({"_id": ObjectId(user_id)})
+        if user:
+            new_camera = {"name": name, "address": address}
+            users_collection.update_one({"_id": ObjectId(user_id)}, {"$push": {"cameras": new_camera}})
+            return jsonify({"message": "Camera added successfully"}), 201
+    return jsonify({"message": "Invalid user_id, name or address"}), 400
 
 @app.route('/api/remove_camera', methods=['POST'])
 def remove_camera():
+    user_id = request.json.get('user_id')
     address = request.json.get('address')
-    camera_to_remove = next((camera for camera in cameras if camera["address"] == address), None)
-    if camera_to_remove:
-        cameras.remove(camera_to_remove)
-        video_captures[address]["capture"].release()
-        del video_captures[address]
-        return jsonify({"message": "Camera removed successfully"}), 200
+    if user_id and address:
+        user = users_collection.find_one({"_id": ObjectId(user_id)})
+        if user:
+            users_collection.update_one({"_id": ObjectId(user_id)}, {"$pull": {"cameras": {"address": address}}})
+            if address in video_captures.get(user_id, {}):
+                video_captures[user_id][address]["capture"].release()
+                del video_captures[user_id][address]
+            return jsonify({"message": "Camera removed successfully"}), 200
     return jsonify({"message": "Camera not found"}), 404
 
 @app.route('/api/cameras', methods=['GET'])

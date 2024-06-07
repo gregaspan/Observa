@@ -1,4 +1,3 @@
-// App.js
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import CameraTile from './CameraTile';
@@ -10,6 +9,7 @@ const App = () => {
     const [newCameraAddress, setNewCameraAddress] = useState('');
     const [selectedCamera, setSelectedCamera] = useState(null);
     const [cameraImages, setCameraImages] = useState({});
+    const userId = JSON.parse(localStorage.getItem('user')).user_id;
 
     useEffect(() => {
         fetchCameras();
@@ -29,7 +29,9 @@ const App = () => {
 
     const fetchCameras = async () => {
         try {
-            const response = await axios.get('http://127.0.0.1:6969/api/cameras');
+            const response = await axios.get('http://127.0.0.1:6969/api/cameras', {
+                params: { user_id: userId }
+            });
             setCameras(response.data);
         } catch (error) {
             console.error('Error fetching cameras', error);
@@ -39,6 +41,7 @@ const App = () => {
     const addCamera = async () => {
         try {
             await axios.post('http://127.0.0.1:6969/api/add_camera', {
+                user_id: userId,
                 name: newCameraName,
                 address: newCameraAddress,
             });
@@ -52,7 +55,10 @@ const App = () => {
 
     const removeCamera = async (address) => {
         try {
-            await axios.post('http://127.0.0.1:6969/api/remove_camera', { address });
+            await axios.post('http://127.0.0.1:6969/api/remove_camera', {
+                user_id: userId,
+                address,
+            });
             fetchCameras();
         } catch (error) {
             console.error('Error removing camera', error);
@@ -102,7 +108,7 @@ const App = () => {
                 <div className="mt-8">
                     <h2 className="text-2xl font-bold mb-4">{selectedCamera.name}</h2>
                     <img
-                        src={`http://127.0.0.1:6969/camera/${cameras.indexOf(selectedCamera)}`}
+                        src={`http://127.0.0.1:6969/camera/${userId}/${cameras.indexOf(selectedCamera)}`}
                         alt={`${selectedCamera.name} Feed`}
                         className="w-full max-w-lg"
                     />
