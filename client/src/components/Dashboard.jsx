@@ -19,7 +19,6 @@ import {
   ChatBubbleLeftEllipsisIcon, // Import the ChatAltIcon
 } from "@heroicons/react/24/outline";
 
-
 import CamerasGrid from "./CamerasGrid";
 import Faces from "./Faces";
 import Recordings from "./Recordings";
@@ -68,20 +67,22 @@ const navigation = [
   { name: "Motion Detection", component: MotionDetection, icon: EyeIcon },
   {
     name: "Facial Recognition",
-    component: FacialRecognition, icon: UserCircleIcon,
+    component: FacialRecognition,
+    icon: UserCircleIcon,
   },
   { name: "Video Playback", component: VideoPlayback, icon: PlayCircleIcon },
   {
-    name: "Email Notifications", component: EmailNotifications, icon: EnvelopeIcon,
+    name: "Email Notifications",
+    component: EmailNotifications,
+    icon: EnvelopeIcon,
   },
   { name: "Documentation", component: Documentation, icon: BookOpenIcon },
   { name: "Observa Chat", component: Chat, icon: ChatBubbleLeftEllipsisIcon },
-
 ];
 
 const signOut = () => {
-  localStorage.removeItem('user');
-  window.location.href = '/login'; // Redirect to login page
+  localStorage.removeItem("user");
+  window.location.href = "/login"; // Redirect to login page
 };
 
 const userNavigation = [
@@ -104,8 +105,10 @@ export default function Example() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const userId = JSON.parse(localStorage.getItem('user')).user_id;
-        const response = await fetch(`http://127.0.0.1:6969/api/cameras?user_id=${userId}`);
+        const userId = JSON.parse(localStorage.getItem("user")).user_id;
+        const response = await fetch(
+          `http://127.0.0.1:6969/api/cameras?user_id=${userId}`
+        );
         const data = await response.json();
         const transformedData = data.map((item, index) => ({
           id: index + 1,
@@ -135,7 +138,11 @@ export default function Example() {
     <>
       <div>
         <Transition.Root show={sidebarOpen} as={Fragment}>
-          <Dialog as="div" className="relative z-50 lg:hidden" onClose={setSidebarOpen}>
+          <Dialog
+            as="div"
+            className="relative z-50 lg:hidden"
+            onClose={setSidebarOpen}
+          >
             <Transition.Child
               as={Fragment}
               enter="transition-opacity ease-linear duration-300"
@@ -246,8 +253,13 @@ export default function Example() {
                           </ul>
                         </li>
                         <li className="mt-auto">
-                          <a
-                            href="#"
+                          <button
+                            onClick={() =>
+                              handleNavClick({
+                                name: "Your profile",
+                                component: Profile,
+                              })
+                            }
                             className="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-indigo-200 hover:bg-indigo-700 hover:text-white"
                           >
                             <Cog6ToothIcon
@@ -255,7 +267,7 @@ export default function Example() {
                               aria-hidden="true"
                             />
                             Settings
-                          </a>
+                          </button>
                         </li>
                       </ul>
                     </nav>
@@ -331,18 +343,22 @@ export default function Example() {
                   </ul>
                 </li>
                 <li className="mt-auto">
-  <button
-    onClick={() => handleNavClick({ name: "Your profile", component: Profile })}
-    className="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-indigo-200 hover:bg-indigo-700 hover:text-white"
-  >
-    <Cog6ToothIcon
-      className="h-6 w-6 shrink-0 text-indigo-200 group-hover:text-white"
-      aria-hidden="true"
-    />
-    Settings
-  </button>
-</li>
-
+                  <button
+                    onClick={() =>
+                      handleNavClick({
+                        name: "Your profile",
+                        component: Profile,
+                      })
+                    }
+                    className="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-indigo-200 hover:bg-indigo-700 hover:text-white"
+                  >
+                    <Cog6ToothIcon
+                      className="h-6 w-6 shrink-0 text-indigo-200 group-hover:text-white"
+                      aria-hidden="true"
+                    />
+                    Settings
+                  </button>
+                </li>
               </ul>
             </nav>
           </div>
@@ -431,7 +447,14 @@ export default function Example() {
                           {({ active }) => (
                             <a
                               href={item.href}
-                              onClick={() => item.component ? setSelectedNav({ name: item.name, component: item.component }) : item.onClick()}
+                              onClick={() =>
+                                item.component
+                                  ? setSelectedNav({
+                                      name: item.name,
+                                      component: item.component,
+                                    })
+                                  : item.onClick()
+                              }
                               className={classNames(
                                 active ? "bg-gray-50" : "",
                                 "block px-3 py-1 text-sm leading-6 text-gray-900"
