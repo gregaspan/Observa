@@ -54,7 +54,7 @@ const ChatApp = () => {
                 <img className="w-8 h-8 rounded-full" src={msg.type === "question" ? userAvatar : "https://static.vecteezy.com/system/resources/previews/007/786/837/original/security-guard-in-simple-flat-personal-profile-icon-or-symbol-people-concept-illustration-vector.jpg"} alt="Profile"/>
                 <div className={`flex flex-col max-w-[320px] p-4 border-gray-200 rounded-xl ${msg.type === "question" ? "bg-blue-100 text-right rounded-br-none" : msg.type === "response" ? "bg-gray-100 text-left rounded-bl-none" : "bg-gray-100 text-left rounded-bl-none"}`}>
                   <div className="flex items-center space-x-2 rtl:space-x-reverse">
-                    <span className="text-sm font-semibold text-gray-900">{msg.type === "question" ? "You" : "Bot"}</span>
+                    <span className="text-sm font-semibold text-gray-900">{msg.type === "question" ? "You" : "Observa Assistant"}</span>
                   </div>
                   <p className="text-sm font-normal py-2.5 text-gray-900">{msg.text}</p>
                 </div>
