@@ -12,7 +12,7 @@ from mailjet_rest import Client
 import os
 import requests
 
-
+from s3_functions import upload_file, get_video_urls
 
 AIKEY = "zu-23f971dd13e55bf7d161d94a5d46840b"
 api_key = ''
@@ -21,7 +21,8 @@ from_email = 'observa564@gmail.com' #na safari je api - mailjet
 seven_io_api_key = ''
 
 
-
+UPLOAD_FOLDER = "uploads"
+BUCKET = "moj-test-bucket"
 
 
 
@@ -111,7 +112,10 @@ def generate_frames(user_id, camera_address):
     global video_captures
     is_recording = False
     recording_start_time = None
-    SECONDS_TO_RECORD = 3
+    SECONDS_TO_RECORD = 5
+    video_writer = None
+    video_filename = None
+
     video_capture = video_captures[user_id][camera_address]["capture"]
     frame_size = video_captures[user_id][camera_address]["frame_size"]
 
@@ -153,6 +157,7 @@ def generate_frames(user_id, camera_address):
             dilated_frame = cv2.dilate(threshold_frame, None, iterations=2)
             contours, _ = cv2.findContours(dilated_frame, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
+            motion_detected = False
             for contour in contours:
                 if cv2.contourArea(contour) < 400000:
                     continue
@@ -175,19 +180,42 @@ def generate_frames(user_id, camera_address):
                     "user_id": user_id,  
                     "image_data": motion_image_data
                 })
+                motion_detected = True
 
-            last_frame = grayscale_frame 
+            last_frame = grayscale_frame
 
-            if not is_recording:
+            if motion_detected and not is_recording:
+                print("sem tu not 3")
                 is_recording = True
                 recording_start_time = datetime.datetime.now()
 
-            if (datetime.datetime.now() - recording_start_time).total_seconds() >= SECONDS_TO_RECORD:
-                is_recording = False
+                if not os.path.exists(UPLOAD_FOLDER):
+                    os.makedirs(UPLOAD_FOLDER)
+                fourcc = cv2.VideoWriter_fourcc(*'XVID')
+                video_filename = os.path.join(UPLOAD_FOLDER, f"{recording_start_time.strftime('%Y%m%d_%H%M%S')}.avi")
+                # Ensure the path uses forward slashes
+                video_filename = video_filename.replace("\\", "/")
+                print("Filename is: " + video_filename)
+                video_writer = cv2.VideoWriter(video_filename, fourcc, 20.0, frame_size)
+
+            if is_recording:
+                print("Sem tu not 4")
+                video_writer.write(frame)
+                elapsed_time = (datetime.datetime.now() - recording_start_time).total_seconds()
+                if elapsed_time >= SECONDS_TO_RECORD:
+                    is_recording = False
+                    video_writer.release()
+                    video_writer = None
+
+                    try:
+                        upload_file(video_filename, BUCKET)
+                        os.remove(video_filename)
+                    except Exception as e:
+                        print(f"Error uploading file to S3: {e}")
 
             ret, buffer = cv2.imencode('.jpg', frame)
             frame_data_base64 = base64.b64encode(buffer).decode('utf-8')
-            
+
             yield (b'--frame\r\n'
                    b'Content-Type: image/jpeg\r\n\r\n' + buffer.tobytes() + b'\r\n')
 
@@ -254,6 +282,11 @@ def get_recordings():
         })
 
     return jsonify(frames), 200
+
+@app.route('/api/recordings/dva', methods=['GET'])
+def recordings():
+    video_urls = get_video_urls()
+    return jsonify(video_urls)
 
 @app.route('/api/images', methods=['GET'])
 def get_images():

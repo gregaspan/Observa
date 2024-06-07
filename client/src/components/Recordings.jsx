@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 
-const RecordedVideoGallery = () => {
+const RecordedVideoGallery2 = () => {
   const [videos, setVideos] = useState([]);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch('http://127.0.0.1:6969/api/recordings?camera_address=https://192.168.8.176:8080/video')
+    fetch('http://127.0.0.1:6969/api/recordings/dva')
       .then(response => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
@@ -13,13 +13,13 @@ const RecordedVideoGallery = () => {
         return response.json();
       })
       .then(data => {
-        console.log('Fetched data:', data); 
+        console.log('Fetched data:', data);
         setVideos(data);
         setError(null);
       })
       .catch(error => {
-        console.error('Error fetching recordings:', error); 
-        setError(error.message); 
+        console.error('Error fetching recordings:', error);
+        setError(error.message);
       });
   }, []);
 
@@ -33,10 +33,7 @@ const RecordedVideoGallery = () => {
       <div className="video-grid">
         {videos.map((video, index) => (
           <div key={index} className="video-item">
-            <video controls>
-              <source src={`data:video/mp4;base64,${video.frame_data_base64}`} type="video/mp4" />
-              Your browser does not support the video tag.
-            </video>
+            <a href={video} target="_blank" rel="noopener noreferrer">{`Video ${index + 1}`}</a>
           </div>
         ))}
       </div>
@@ -44,4 +41,5 @@ const RecordedVideoGallery = () => {
   );
 };
 
-export default RecordedVideoGallery;
+export default RecordedVideoGallery2;
+
