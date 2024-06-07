@@ -28,6 +28,7 @@ import AddSubscriber from "./AddSubscriber";
 import Chatbot from "./Chatbot";
 import Motion from "./Motion";
 import Report from "./Reports";
+import Doc from "./Doc";
 
 function Dashboard() {
   return <CamerasGrid />;
@@ -54,7 +55,7 @@ function EmailNotifications() {
 }
 
 function Documentation() {
-  return <Test />;
+  return <Doc />;
 }
 
 function Chat() {
