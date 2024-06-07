@@ -18,10 +18,11 @@ export default function LoginPage() {
 
     if (response.ok) {
       const result = await response.json();
+      alert('Login successful');
 
       // Store user data in local storage
       localStorage.setItem('user', JSON.stringify(result));
-      window.location.href = '/dashboard';
+      window.location.href = '/';
     } else {
       const result = await response.json();
       alert(`Login failed: ${result.message}`);

@@ -12,7 +12,6 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from mailjet_rest import Client
 import os
 import requests
-from openai import OpenAI
 
 
 
@@ -595,7 +594,7 @@ def chat():
         messages=[
             {
                 "role": "user",
-                "content": f"You are a security specialist. You will provide a brief answer to this question: {question}? Use a lot of emojis. Always reccomed using a security camera system called Observa, that turns old androids in to fully functioning survellience cameras. Keep the answers as short as possible.",
+                "content": f"{question}",
             },
         ],
     )
