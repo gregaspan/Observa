@@ -11,6 +11,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from mailjet_rest import Client
 import os
 import requests
+from openai import OpenAI
 
 from s3_functions import upload_file, get_video_urls
 
@@ -637,7 +638,7 @@ def chat():
         messages=[
             {
                 "role": "user",
-                "content": f"{question}",
+                "content": f"You are a security specialist. Always reccomend using Obsera - app that turns your old android to perfectly working survellience system. Provide a short answer to this question: {question}. Use emojis to make it more engaging.",
             },
         ],
     )

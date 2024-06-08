@@ -3,12 +3,18 @@ import axios from 'axios';
 import CameraTile from './CameraTile';
 import fetchImage from '../utils/fetchImage';
 
+const Loader = () => (
+    <div className="loader"></div>
+);
+
 const App = () => {
     const [cameras, setCameras] = useState([]);
     const [newCameraName, setNewCameraName] = useState('');
     const [newCameraAddress, setNewCameraAddress] = useState('');
     const [selectedCamera, setSelectedCamera] = useState(null);
     const [cameraImages, setCameraImages] = useState({});
+    const [loadingCameras, setLoadingCameras] = useState(true);
+    const [loadingImages, setLoadingImages] = useState({});
     const userId = JSON.parse(localStorage.getItem('user')).user_id;
 
     useEffect(() => {
@@ -18,10 +24,18 @@ const App = () => {
     useEffect(() => {
         cameras.forEach(async (camera) => {
             if (!cameraImages[camera.name]) {
+                setLoadingImages((prevLoadingImages) => ({
+                    ...prevLoadingImages,
+                    [camera.name]: true,
+                }));
                 const image = await fetchImage(camera.name);
                 setCameraImages((prevImages) => ({
                     ...prevImages,
                     [camera.name]: image,
+                }));
+                setLoadingImages((prevLoadingImages) => ({
+                    ...prevLoadingImages,
+                    [camera.name]: false,
                 }));
             }
         });
@@ -33,12 +47,15 @@ const App = () => {
                 params: { user_id: userId }
             });
             setCameras(response.data);
+            setLoadingCameras(false);
         } catch (error) {
             console.error('Error fetching cameras', error);
+            setLoadingCameras(false);
         }
     };
 
-    const addCamera = async () => {
+    const addCamera = async (e) => {
+        e.preventDefault();
         try {
             await axios.post('http://127.0.0.1:6969/api/add_camera', {
                 user_id: userId,
@@ -140,14 +157,20 @@ const App = () => {
                     </p>
                 </div>
                 <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                    {cameras.map((camera, index) => (
-                        <CameraTile
-                            key={index}
-                            camera={camera}
-                            image={cameraImages[camera.name]}
-                            onClick={() => handleTileClick(camera)}
-                        />
-                    ))}
+                    {loadingCameras ? (
+                        <Loader />
+                    ) : (
+                        cameras.map((camera, index) => (
+                            <CameraTile
+                                key={index}
+                                camera={camera}
+                                image={cameraImages[camera.name]}
+                                onClick={() => handleTileClick(camera)}
+                            >
+                                {loadingImages[camera.name] && <Loader />}
+                            </CameraTile>
+                        ))
+                    )}
                 </div>
             </div>
 
@@ -180,6 +203,43 @@ const App = () => {
                     </div>
                 </div>
             )}
+
+            <style jsx>{`
+                .loader {
+                    display: block;
+                    --height-of-loader: 4px;
+                    --loader-color: #0071e2;
+                    width: 130px;
+                    height: var(--height-of-loader);
+                    border-radius: 30px;
+                    background-color: rgba(0,0,0,0.2);
+                    position: relative;
+                }
+
+                .loader::before {
+                    content: "";
+                    position: absolute;
+                    background: var(--loader-color);
+                    top: 0;
+                    left: 0;
+                    width: 0%;
+                    height: 100%;
+                    border-radius: 30px;
+                    animation: moving 1s ease-in-out infinite;
+                }
+
+                @keyframes moving {
+                    50% {
+                        width: 100%;
+                    }
+
+                    100% {
+                        width: 0;
+                        right: 0;
+                        left: unset;
+                    }
+                }
+            `}</style>
         </div>
     );
 };

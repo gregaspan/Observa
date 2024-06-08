@@ -69,22 +69,6 @@ const ImageGallery = () => {
       .catch(error => console.error('Error deleting image:', error));
   };
 
-  const loaderStyle = {
-    border: '8px solid #f3f3f3',
-    borderTop: '8px solid #3498db',
-    borderRadius: '50%',
-    width: '60px',
-    height: '60px',
-    animation: 'spin 2s linear infinite',
-  };
-
-  const loaderKeyframes = `
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-  `;
-
   return (
     <div className="divide-y divide-gray-200">
       {/* Gallery Header */}
@@ -97,9 +81,46 @@ const ImageGallery = () => {
 
       {/* Loader */}
       {loading ? (
-        <div className="flex justify-center items-center">
-          <div style={loaderStyle}></div>
-          <style>{loaderKeyframes}</style>
+        <div className="flex justify-center items-center h-64">
+          <div className="loader"></div>
+          <style>
+            {`
+              .loader {
+                display: block;
+                --height-of-loader: 4px;
+                --loader-color: #0071e2;
+                width: 130px;
+                height: var(--height-of-loader);
+                border-radius: 30px;
+                background-color: rgba(0,0,0,0.2);
+                position: relative;
+              }
+
+              .loader::before {
+                content: "";
+                position: absolute;
+                background: var(--loader-color);
+                top: 0;
+                left: 0;
+                width: 0%;
+                height: 100%;
+                border-radius: 30px;
+                animation: moving 1s ease-in-out infinite;
+              }
+
+              @keyframes moving {
+                50% {
+                  width: 100%;
+                }
+
+                100% {
+                  width: 0;
+                  right: 0;
+                  left: unset;
+                }
+              }
+            `}
+          </style>
         </div>
       ) : (
         /* Image Grid */
