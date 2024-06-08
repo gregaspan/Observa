@@ -1,6 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 export default function LoginPage() {
+  const [notification, setNotification] = useState(null);
+
+  const showNotification = (message, type = 'success') => {
+    setNotification({ message, type });
+    setTimeout(() => setNotification(null), 3000);
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -18,19 +25,29 @@ export default function LoginPage() {
 
     if (response.ok) {
       const result = await response.json();
-      alert('Login successful');
+      showNotification('Login successful');
 
       // Store user data in local storage
       localStorage.setItem('user', JSON.stringify(result));
       window.location.href = '/';
     } else {
       const result = await response.json();
-      alert(`Login failed: ${result.message}`);
+      showNotification(`Login failed: ${result.message}`, 'error');
     }
   };
 
   return (
     <>
+      {notification && (
+        <div
+          className={`fixed top-0 right-0 mt-4 mr-4 p-4 rounded shadow-lg z-50 ${
+            notification.type === 'error' ? 'bg-red-500' : 'bg-green-500'
+          } text-white`}
+          style={{ zIndex: 9999 }}
+        >
+          {notification.message}
+        </div>
+      )}
       <div className="flex min-h-full flex-1 flex-col justify-center py-12 sm:px-6 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <img
@@ -175,17 +192,17 @@ export default function LoginPage() {
                 </a>
               </div>
             </div>
-          </div>
 
-          <p className="mt-10 text-center text-sm text-gray-500">
-            Not a member?{" "}
-            <a
-              href="/register"
-              className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
-            >
-              Sign up here{" "}
-            </a>
-          </p>
+            <p className="mt-10 text-center text-sm text-gray-500">
+              Not a member?{" "}
+              <a
+                href="/register"
+                className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
+              >
+                Sign up here{" "}
+              </a>
+            </p>
+          </div>
         </div>
       </div>
     </>

@@ -3,12 +3,18 @@ import React, { useState, useEffect } from 'react';
 const Motion = () => {
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [notification, setNotification] = useState(null);
   const user = JSON.parse(localStorage.getItem('user'));
   const userId = user.user_id;
 
   useEffect(() => {
     fetchMotionImages();
   }, [userId]);
+
+  const showNotification = (message, type = 'success') => {
+    setNotification({ message, type });
+    setTimeout(() => setNotification(null), 3000);
+  };
 
   const fetchMotionImages = () => {
     fetch(`http://127.0.0.1:6969/api/motion_images?user_id=${userId}`)
@@ -20,6 +26,7 @@ const Motion = () => {
       .catch(error => {
         console.error('Error fetching images:', error);
         setLoading(false);
+        showNotification('Error fetching images', 'error');
       });
   };
 
@@ -39,8 +46,12 @@ const Motion = () => {
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
+        showNotification('Image downloaded successfully');
       })
-      .catch(error => console.error('Error fetching image:', error));
+      .catch(error => {
+        console.error('Error fetching image:', error);
+        showNotification('Error downloading image', 'error');
+      });
   };
 
   const handleShare = (imageData) => {
@@ -49,9 +60,12 @@ const Motion = () => {
       .then(blob => {
         const item = new ClipboardItem({ 'image/png': blob });
         navigator.clipboard.write([item]);
-        alert('Image copied to clipboard');
+        showNotification('Image copied to clipboard');
       })
-      .catch(error => console.error('Error copying image to clipboard:', error));
+      .catch(error => {
+        console.error('Error copying image to clipboard:', error);
+        showNotification('Error copying image to clipboard', 'error');
+      });
   };
 
   const handleDelete = (id) => {
@@ -66,15 +80,30 @@ const Motion = () => {
     .then(data => {
       if (data.message === "Image deleted successfully") {
         setImages(images.filter(image => image.id !== id));
+        showNotification('Image deleted successfully');
       } else {
         console.error('Error deleting image:', data.message);
+        showNotification(`Error deleting image: ${data.message}`, 'error');
       }
     })
-    .catch(error => console.error('Error deleting image:', error));
+    .catch(error => {
+      console.error('Error deleting image:', error);
+      showNotification('Error deleting image', 'error');
+    });
   };
 
   return (
     <div className="divide-y divide-gray-200">
+      {notification && (
+        <div
+          className={`fixed top-0 right-0 mt-4 mr-4 p-4 rounded shadow-lg z-50 ${
+            notification.type === 'error' ? 'bg-red-500' : 'bg-green-500'
+          } text-white`}
+          style={{ zIndex: 9999 }}
+        >
+          {notification.message}
+        </div>
+      )}
       {/* Gallery Header */}
       <div className="px-4 py-16 sm:px-6 lg:px-8">
         <h1 className="text-base font-semibold leading-7 text-gray-900">Motion Detected Content</h1>

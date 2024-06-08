@@ -78,6 +78,46 @@ users = [
 # Insert users into the database
 users_collection.insert_many(users)
 
+@app.route('/api/report', methods=['GET'])
+def generate_report():
+    user_id = request.args.get('user_id')
+    if not user_id:
+        return jsonify({"message": "user_id is required"}), 400
+
+    # Fetch data
+    faces = list(faces_collection.find({"user_id": user_id}).sort("timestamp", -1))
+    motions = list(motion_collection.find({"user_id": user_id}).sort("timestamp", -1))
+    recordings = list(recordings_collection.find({"user_id": user_id}).sort("timestamp", -1))
+
+    # Generate report content
+    report_content = {
+        "user_id": user_id,
+        "total_faces_detected": len(faces),
+        "total_motions_detected": len(motions),
+        "total_recordings": len(recordings),
+        "faces": [
+            {
+                "timestamp": face["timestamp"],
+                "image_data": face["image_data"]
+            } for face in faces
+        ],
+        "motions": [
+            {
+                "timestamp": motion["timestamp"],
+                "image_data": motion["image_data"]
+            } for motion in motions
+        ],
+        "recordings": [
+            {
+                "timestamp": recording["timestamp"],
+                "video_url": recording.get("video_url", "")
+            } for recording in recordings
+        ]
+        
+    }
+    return jsonify(report_content), 200
+
+
 def send_sms(api_key, phone_number, message):
     url = "https://gateway.seven.io/api/sms"
     payload = {

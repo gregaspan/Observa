@@ -4,6 +4,7 @@ import AddSubscriber from './AddSubscriber';
 const AccountSettings = () => {
   const [user, setUser] = useState({ user_id: '', name: '', email: '', avatar: '' });
   const [passwords, setPasswords] = useState({ currentPassword: '', newPassword: '', confirmPassword: '' });
+  const [notification, setNotification] = useState(null);
 
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem('user'));
@@ -11,6 +12,11 @@ const AccountSettings = () => {
       setUser({ user_id: storedUser.user_id, name: storedUser.name, email: storedUser.email, avatar: storedUser.avatar });
     }
   }, []);
+
+  const showNotification = (message, type = 'success') => {
+    setNotification({ message, type });
+    setTimeout(() => setNotification(null), 3000);
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -42,20 +48,21 @@ const AccountSettings = () => {
       if (response.ok) {
         const result = await response.json();
         localStorage.setItem('user', JSON.stringify(result));
-        alert('Profile updated successfully');
+        showNotification('Profile updated successfully');
       } else {
         const error = await response.json();
-        alert('Error updating profile: ' + error.message);
+        showNotification('Error updating profile: ' + error.message, 'error');
       }
     } catch (error) {
       console.error('Error:', error);
+      showNotification('Error updating profile', 'error');
     }
   };
 
   const handlePasswordSubmit = async (e) => {
     e.preventDefault();
     if (passwords.newPassword !== passwords.confirmPassword) {
-      alert('New password and confirmation do not match');
+      showNotification('New password and confirmation do not match', 'error');
       return;
     }
 
@@ -73,14 +80,15 @@ const AccountSettings = () => {
       });
 
       if (response.ok) {
-        alert('Password updated successfully');
+        showNotification('Password updated successfully');
         setPasswords({ currentPassword: '', newPassword: '', confirmPassword: '' });
       } else {
         const error = await response.json();
-        alert('Error updating password: ' + error.message);
+        showNotification('Error updating password: ' + error.message, 'error');
       }
     } catch (error) {
       console.error('Error:', error);
+      showNotification('Error updating password', 'error');
     }
   };
 
@@ -96,14 +104,15 @@ const AccountSettings = () => {
 
       if (response.ok) {
         localStorage.removeItem('user');
-        alert('Account deleted successfully');
+        showNotification('Account deleted successfully');
         // Redirect or perform additional cleanup
       } else {
         const error = await response.json();
-        alert('Error deleting account: ' + error.message);
+        showNotification('Error deleting account: ' + error.message, 'error');
       }
     } catch (error) {
       console.error('Error:', error);
+      showNotification('Error deleting account', 'error');
     }
   };
 
@@ -119,6 +128,16 @@ const AccountSettings = () => {
 
   return (
     <div className="divide-y divide-gray-200">
+      {notification && (
+        <div
+          className={`fixed top-0 right-0 mt-4 mr-4 p-4 rounded shadow-lg z-50 ${
+            notification.type === 'error' ? 'bg-red-500' : 'bg-green-500'
+          } text-white`}
+          style={{ zIndex: 9999 }}
+        >
+          {notification.message}
+        </div>
+      )}
       {/* Personal Information Section */}
       <div className="grid max-w-7xl grid-cols-1 gap-x-8 gap-y-10 px-4 py-16 sm:px-6 md:grid-cols-3 lg:px-8">
         <div>

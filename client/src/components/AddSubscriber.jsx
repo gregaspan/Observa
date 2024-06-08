@@ -5,6 +5,7 @@ export default function ManageSubscribers() {
   const [phoneSubscriber, setPhoneSubscriber] = useState("");
   const [emailSubscribers, setEmailSubscribers] = useState([]);
   const [phoneSubscribers, setPhoneSubscribers] = useState([]);
+  const [notification, setNotification] = useState(null);
   const user = JSON.parse(localStorage.getItem("user"));
 
   useEffect(() => {
@@ -13,6 +14,11 @@ export default function ManageSubscribers() {
       setPhoneSubscribers(user.phone_subscribers || []);
     }
   }, [user]);
+
+  const showNotification = (message, type = "success") => {
+    setNotification({ message, type });
+    setTimeout(() => setNotification(null), 3000);
+  };
 
   const handleEmailSubmit = async (event) => {
     event.preventDefault();
@@ -42,10 +48,10 @@ export default function ManageSubscribers() {
         email_subscribers: [...emailSubscribers, emailSubscriber],
       };
       localStorage.setItem("user", JSON.stringify(updatedUser));
-      alert("Email subscriber added successfully");
+      showNotification("Email subscriber added successfully");
     } else {
       const result = await response.json();
-      alert(`Failed to add email subscriber: ${result.message}`);
+      showNotification(`Failed to add email subscriber: ${result.message}`, "error");
     }
 
     setEmailSubscriber("");
@@ -79,10 +85,10 @@ export default function ManageSubscribers() {
         phone_subscribers: [...phoneSubscribers, phoneSubscriber],
       };
       localStorage.setItem("user", JSON.stringify(updatedUser));
-      alert("Phone subscriber added successfully");
+      showNotification("Phone subscriber added successfully");
     } else {
       const result = await response.json();
-      alert(`Failed to add phone subscriber: ${result.message}`);
+      showNotification(`Failed to add phone subscriber: ${result.message}`, "error");
     }
 
     setPhoneSubscriber("");
@@ -112,10 +118,10 @@ export default function ManageSubscribers() {
         email_subscribers: emailSubscribers.filter((sub) => sub !== subscriber),
       };
       localStorage.setItem("user", JSON.stringify(updatedUser));
-      alert("Email subscriber removed successfully");
+      showNotification("Email subscriber removed successfully");
     } else {
       const result = await response.json();
-      alert(`Failed to remove email subscriber: ${result.message}`);
+      showNotification(`Failed to remove email subscriber: ${result.message}`, "error");
     }
   };
 
@@ -143,15 +149,25 @@ export default function ManageSubscribers() {
         phone_subscribers: phoneSubscribers.filter((sub) => sub !== subscriber),
       };
       localStorage.setItem("user", JSON.stringify(updatedUser));
-      alert("Phone subscriber removed successfully");
+      showNotification("Phone subscriber removed successfully");
     } else {
       const result = await response.json();
-      alert(`Failed to remove phone subscriber: ${result.message}`);
+      showNotification(`Failed to remove phone subscriber: ${result.message}`, "error");
     }
   };
 
   return (
     <div className="divide-y divide-gray-200">
+      {notification && (
+        <div
+          className={`fixed top-0 right-0 mt-4 mr-4 p-4 rounded shadow-lg z-50 ${
+            notification.type === "error" ? "bg-red-500" : "bg-green-500"
+          } text-white`}
+          style={{ zIndex: 9999 }}
+        >
+          {notification.message}
+        </div>
+      )}
       {/* Add Email Subscriber Section */}
       <div className="grid max-w-7xl grid-cols-1 gap-x-8 gap-y-10 px-4 py-16 sm:px-6 md:grid-cols-3 lg:px-8">
         <div>

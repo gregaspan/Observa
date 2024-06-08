@@ -1,6 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 export default function RegistrationPage() {
+  const [notification, setNotification] = useState(null);
+
+  const showNotification = (message, type = 'success') => {
+    setNotification({ message, type });
+    setTimeout(() => setNotification(null), 3000);
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -11,7 +18,7 @@ export default function RegistrationPage() {
     const confirmPassword = data.get('confirm-password');
 
     if (password !== confirmPassword) {
-      alert('Passwords do not match');
+      showNotification('Passwords do not match', 'error');
       return;
     }
 
@@ -24,16 +31,26 @@ export default function RegistrationPage() {
     });
 
     if (response.ok) {
-      alert('Registration successful');
+      showNotification('Registration successful');
       window.location.href = '/login';
     } else {
       const result = await response.json();
-      alert(`Registration failed: ${result.message}`);
+      showNotification(`Registration failed: ${result.message}`, 'error');
     }
   };
 
   return (
     <>
+      {notification && (
+        <div
+          className={`fixed top-0 right-0 mt-4 mr-4 p-4 rounded shadow-lg z-50 ${
+            notification.type === 'error' ? 'bg-red-500' : 'bg-green-500'
+          } text-white`}
+          style={{ zIndex: 9999 }}
+        >
+          {notification.message}
+        </div>
+      )}
       <div className="flex min-h-full flex-1 flex-col justify-center py-12 sm:px-6 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <img
