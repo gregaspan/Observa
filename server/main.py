@@ -1,6 +1,6 @@
 import cv2
 import datetime
-from flask import Flask, Response, jsonify, request, send_file
+from flask import Flask, Response, jsonify, request, send_file, session
 from flask_cors import CORS
 from pymongo import MongoClient
 import base64
@@ -35,6 +35,7 @@ html_content = '<h3>This is a test email sent from Mailjet.</h3>'
 
 
 app = Flask(__name__)
+app.secret_key = os.urandom(24)
 CORS(app)
 
 video_captures = {}
@@ -192,7 +193,11 @@ def generate_frames(user_id, camera_address):
                 if not os.path.exists(UPLOAD_FOLDER):
                     os.makedirs(UPLOAD_FOLDER)
                 fourcc = cv2.VideoWriter_fourcc(*'XVID')
-                video_filename = os.path.join(UPLOAD_FOLDER, f"{recording_start_time.strftime('%Y%m%d_%H%M%S')}.avi")
+
+                print("User id je: " + user_id)
+                # Include user ID in the video filename
+                video_filename = os.path.join(UPLOAD_FOLDER,
+                                              f"{recording_start_time.strftime('%Y%m%d_%H%M%S')}_{user_id}.avi")
                 # Ensure the path uses forward slashes
                 video_filename = video_filename.replace("\\", "/")
                 print("Filename is: " + video_filename)
@@ -228,7 +233,10 @@ def index(user_id, camera_id):
     user = users_collection.find_one({"_id": ObjectId(user_id)})
     if not user or camera_id < 0 or camera_id >= len(user["cameras"]):
         return "Camera not found", 404
-    return Response(generate_frames(user_id, user["cameras"][camera_id]["address"]), mimetype='multipart/x-mixed-replace; boundary=frame')
+    camera_address = user["cameras"][camera_id]["address"]
+    if camera_address not in video_captures[user_id]:
+        return f"Camera address {camera_address} not initialized for user {user_id}", 404
+    return Response(generate_frames(user_id, camera_address), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 @app.route('/api/add_camera', methods=['POST'])
 def add_camera():
@@ -283,10 +291,13 @@ def get_recordings():
 
     return jsonify(frames), 200
 
-@app.route('/api/recordings/dva', methods=['GET'])
-def recordings():
-    video_urls = get_video_urls()
+
+@app.route('/api/recordings/dva/<user_id>', methods=['GET'])
+def recordings(user_id):
+    print(user_id)
+    video_urls = get_video_urls(user_id)
     return jsonify(video_urls)
+
 
 @app.route('/api/images', methods=['GET'])
 def get_images():
@@ -369,6 +380,9 @@ def login():
             {"$addToSet": {"email_subscribers": email}}
         )
         user_data["email_subscribers"].append(email)
+
+    # Store user ID in session
+    session['user_id'] = str(user["_id"])
 
     return jsonify(user_data), 200
 

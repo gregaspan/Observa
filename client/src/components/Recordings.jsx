@@ -5,22 +5,32 @@ const RecordedVideoGallery2 = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch('http://127.0.0.1:6969/api/recordings/dva')
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
-      .then(data => {
-        console.log('Fetched data:', data);
-        setVideos(data);
-        setError(null);
-      })
-      .catch(error => {
-        console.error('Error fetching recordings:', error);
-        setError(error.message);
-      });
+    // Retrieve user data from local storage
+    const user = JSON.parse(localStorage.getItem('user'));
+    
+    // Check if user data exists
+    if (user && user.user_id) {
+      const userId = user.user_id;
+
+      fetch(`http://127.0.0.1:6969/api/recordings/dva/${userId}`)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          console.log('Fetched data:', data);
+          setVideos(data);
+          setError(null);
+        })
+        .catch(error => {
+          console.error('Error fetching recordings:', error);
+          setError(error.message);
+        });
+    } else {
+      setError('User not logged in or user ID not found');
+    }
   }, []);
 
   if (error) {
@@ -42,4 +52,5 @@ const RecordedVideoGallery2 = () => {
 };
 
 export default RecordedVideoGallery2;
+
 

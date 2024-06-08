@@ -15,9 +15,9 @@ def upload_file(file_name, bucket):
     return presigned_url
 
 
-def get_video_urls():
+def get_video_urls(user_id):
     s3_client = boto3.client('s3')
     response = s3_client.list_objects_v2(Bucket=BUCKET_NAME)
     videos = response.get('Contents', [])
-    video_urls = [S3_BASE_URL + video['Key'] for video in videos if video['Key'].endswith('.avi')]
+    video_urls = [S3_BASE_URL + video['Key'] for video in videos if video['Key'].endswith(f'{user_id}.avi')]
     return video_urls
