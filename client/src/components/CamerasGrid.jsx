@@ -60,7 +60,7 @@ const App = () => {
             await axios.post('http://127.0.0.1:6969/api/add_camera', {
                 user_id: userId,
                 name: newCameraName,
-                address: newCameraAddress,
+                address: newCameraAddress + '/video',
             });
             fetchCameras();
             setNewCameraName('');
