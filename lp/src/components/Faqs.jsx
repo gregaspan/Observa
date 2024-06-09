@@ -12,7 +12,7 @@ const faqs = [
     },
     {
       question: 'Is Observa compatible with both Android and iOS devices?',
-      answer: 'Yes, Observa works seamlessly with both Android and iOS devices, making setup and usage straightforward regardless of your smartphone platform.',
+      answer: 'No, unfortunately Observa works only with Android devices for now.',
     },
     {
       question: 'Can I use multiple cameras with Observa?',
@@ -44,7 +44,7 @@ const faqs = [
     },
     {
       question: 'How do I get started with Observa?',
-      answer: 'Getting started is easy! Download the Observa app on both your old and current smartphones, follow the setup instructions, and start monitoring your property in minutes.',
+      answer: 'Getting started is easy! Just click the "Get started" button on this page, follow the setup instructions and start monitoring your property in minutes.',
     },
   ],
 ];
