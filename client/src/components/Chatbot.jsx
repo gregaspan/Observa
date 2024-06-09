@@ -104,7 +104,7 @@ const ChatApp = () => {
                 <div
                   className={`flex flex-col max-w-[320px] p-4 border-gray-200 rounded-xl ${
                     msg.type === "question"
-                      ? "bg-indigo-100 text-right rounded-br-none"
+                      ? "bg-blue-100 text-right rounded-br-none"
                       : "bg-gray-100 text-left rounded-bl-none"
                   }`}
                 >
@@ -134,11 +134,11 @@ const ChatApp = () => {
               onChange={handleInputChange}
               onKeyDown={handleKeyPress}
               placeholder="Enter your question..."
-              className="border border-gray-300 p-3 rounded-lg flex-grow focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="border border-gray-300 p-3 rounded-lg flex-grow focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             <button
               onClick={handleSubmit}
-              className="px-4 py-2 bg-indigo-500 text-white rounded-lg shadow-md hover:bg-indigo-400 transition duration-200"
+              className="px-4 py-2 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-400 transition duration-200"
               disabled={isLoading}
             >
               {isLoading ? "Sending..." : "Send"}

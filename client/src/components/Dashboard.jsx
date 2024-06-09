@@ -16,7 +16,7 @@ import {
   BookOpenIcon,
   ChevronDownIcon,
   MagnifyingGlassIcon,
-  ChatBubbleLeftEllipsisIcon, // Import the ChatAltIcon
+  ChatBubbleLeftEllipsisIcon,
 } from "@heroicons/react/24/outline";
 
 import CamerasGrid from "./CamerasGrid";
@@ -74,7 +74,7 @@ const navigation = [
   { name: "Video Playback", component: VideoPlayback, icon: PlayCircleIcon },
   {
     name: "Email Notifications",
-    component: EmailNotifications,
+    component: EmailNotifications, 
     icon: EnvelopeIcon,
   },
   { name: "Documentation", component: Documentation, icon: BookOpenIcon },
@@ -104,6 +104,11 @@ export default function Example() {
   const [teams, setTeams] = useState([]);
 
   useEffect(() => {
+    if (!user) {
+      window.location.href = "/login"; // Redirect to login page if user is not logged in
+      return;
+    }
+
     const fetchData = async () => {
       try {
         const userId = JSON.parse(localStorage.getItem("user")).user_id;
@@ -132,7 +137,7 @@ export default function Example() {
   };
 
   if (!user) {
-    return <div>You are not logged in.</div>;
+    return null; // Return null to avoid rendering anything before redirection
   }
 
   return (
@@ -190,7 +195,7 @@ export default function Example() {
                       </button>
                     </div>
                   </Transition.Child>
-                  <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-indigo-600 px-6 pb-4">
+                  <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-blue-600 px-6 pb-4">
                     <div className="flex h-16 shrink-0 items-center">
                       <img
                         className="h-8 w-auto"
@@ -208,8 +213,8 @@ export default function Example() {
                                   onClick={() => handleNavClick(item)}
                                   className={classNames(
                                     selectedNav.name === item.name
-                                      ? "bg-indigo-700 text-white"
-                                      : "text-indigo-200 hover:text-white hover:bg-indigo-700",
+                                      ? "bg-blue-700 text-white"
+                                      : "text-blue-200 hover:text-white hover:bg-blue-700",
                                     "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold w-full text-left"
                                   )}
                                 >
@@ -217,7 +222,7 @@ export default function Example() {
                                     className={classNames(
                                       selectedNav.name === item.name
                                         ? "text-white"
-                                        : "text-indigo-200 group-hover:text-white",
+                                        : "text-blue-200 group-hover:text-white",
                                       "h-6 w-6 shrink-0"
                                     )}
                                     aria-hidden="true"
@@ -229,7 +234,7 @@ export default function Example() {
                           </ul>
                         </li>
                         <li>
-                          <div className="text-xs font-semibold leading-6 text-indigo-200">
+                          <div className="text-xs font-semibold leading-6 text-blue-200">
                             Your Cameras
                           </div>
                           <ul role="list" className="-mx-2 mt-2 space-y-1">
@@ -239,12 +244,12 @@ export default function Example() {
                                   href={team.href}
                                   className={classNames(
                                     team.current
-                                      ? "bg-indigo-700 text-white"
-                                      : "text-indigo-200 hover:text-white hover:bg-indigo-700",
+                                      ? "bg-blue-700 text-white"
+                                      : "text-blue-200 hover:text-white hover:bg-blue-700",
                                     "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
                                   )}
                                 >
-                                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-indigo-400 bg-indigo-500 text-[0.625rem] font-medium text-white">
+                                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-blue-400 bg-blue-500 text-[0.625rem] font-medium text-white">
                                     {team.initial}
                                   </span>
                                   <span className="truncate">{team.name}</span>
@@ -261,10 +266,10 @@ export default function Example() {
                                 component: Profile,
                               })
                             }
-                            className="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-indigo-200 hover:bg-indigo-700 hover:text-white"
+                            className="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-blue-200 hover:bg-blue-700 hover:text-white"
                           >
                             <Cog6ToothIcon
-                              className="h-6 w-6 shrink-0 text-indigo-200 group-hover:text-white"
+                              className="h-6 w-6 shrink-0 text-blue-200 group-hover:text-white"
                               aria-hidden="true"
                             />
                             Settings
@@ -280,7 +285,7 @@ export default function Example() {
         </Transition.Root>
 
         <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
-          <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-indigo-600 px-6 pb-4">
+          <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-blue-600 px-6 pb-4">
             <div className="flex h-16 shrink-0 items-center">
               <img
                 className="h-8 w-auto"
@@ -298,8 +303,8 @@ export default function Example() {
                           onClick={() => handleNavClick(item)}
                           className={classNames(
                             selectedNav.name === item.name
-                              ? "bg-indigo-700 text-white"
-                              : "text-indigo-200 hover:text-white hover:bg-indigo-700",
+                              ? "bg-blue-700 text-white"
+                              : "text-blue-200 hover:text-white hover:bg-blue-700",
                             "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold w-full text-left"
                           )}
                         >
@@ -307,7 +312,7 @@ export default function Example() {
                             className={classNames(
                               selectedNav.name === item.name
                                 ? "text-white"
-                                : "text-indigo-200 group-hover:text-white",
+                                : "text-blue-200 group-hover:text-white",
                               "h-6 w-6 shrink-0"
                             )}
                             aria-hidden="true"
@@ -319,7 +324,7 @@ export default function Example() {
                   </ul>
                 </li>
                 <li>
-                  <div className="text-xs font-semibold leading-6 text-indigo-200">
+                  <div className="text-xs font-semibold leading-6 text-blue-200">
                     Your Cameras
                   </div>
                   <ul role="list" className="-mx-2 mt-2 space-y-1">
@@ -329,12 +334,12 @@ export default function Example() {
                           href={team.href}
                           className={classNames(
                             team.current
-                              ? "bg-indigo-700 text-white"
-                              : "text-indigo-200 hover:text-white hover:bg-indigo-700",
+                              ? "bg-blue-700 text-white"
+                              : "text-blue-200 hover:text-white hover:bg-blue-700",
                             "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
                           )}
                         >
-                          <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-indigo-400 bg-indigo-500 text-[0.625rem] font-medium text-white">
+                          <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-blue-400 bg-blue-500 text-[0.625rem] font-medium text-white">
                             {team.initial}
                           </span>
                           <span className="truncate">{team.name}</span>
@@ -351,10 +356,10 @@ export default function Example() {
                         component: Profile,
                       })
                     }
-                    className="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-indigo-200 hover:bg-indigo-700 hover:text-white"
+                    className="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-blue-200 hover:bg-blue-700 hover:text-white"
                   >
                     <Cog6ToothIcon
-                      className="h-6 w-6 shrink-0 text-indigo-200 group-hover:text-white"
+                      className="h-6 w-6 shrink-0 text-blue-200 group-hover:text-white"
                       aria-hidden="true"
                     />
                     Settings
