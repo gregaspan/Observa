@@ -1,12 +1,36 @@
-# Observa - Video Surveillance System
+# Observa - Video Surveillance System!
 
-## Overview
+LOGO
 
-Observa is a comprehensive video surveillance system designed to provide reliable security and monitoring capabilities. This system offers numerous features, including remote access, live observation, video playback, motion detection, face recognition, and more. The Observa system is ideal for protecting physical spaces, monitoring experimental environments, and enhancing personal security with advanced technological functionalities.
 
-### Live Stream + Snapshots
 
-## Features
+
+Observa web app, is designed to use old/rejected android phones as a video surveillance system. Our goal was to provide security to everyone without any hassle.  
+
+This file will serve as a project presentation, instructions for installing the application locally, using the application online (for demonstration purposes) and documentation for the Observa application. 
+
+**Team members**
+- Gregor Špan
+- Gal Dvoršak
+- Miha Čakš
+
+**Contents of the project**
+1. Overview
+   - Detailed description of the project
+2. Documentation
+- Functionalities
+- Technology stack
+- Organisation and method of work
+- Data structure design
+- Testing
+3. Installation instructions 
+   - Selfhosted version
+   - Paid version
+4. Use of the application
+   - User guide
+   - Final look of the app
+5. Landing page
+6. Presentation
 
 ### Basic Functions
 
