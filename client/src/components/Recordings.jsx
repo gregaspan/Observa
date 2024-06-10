@@ -11,7 +11,7 @@ const RecordedVideoGallery2 = () => {
     if (user && user.user_id) {
       const userId = user.user_id;
 
-      fetch(`https://flask-heroku-deploy-1.onrender.com/api/recordings/dva/${userId}`)
+      fetch(`https://observa-api.onrender.com/api/recordings/dva/${userId}`)
         .then(response => {
           if (!response.ok) {
             throw new Error('Network response was not ok');

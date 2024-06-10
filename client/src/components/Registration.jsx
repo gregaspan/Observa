@@ -22,7 +22,7 @@ export default function RegistrationPage() {
       return;
     }
 
-    const response = await fetch('https://flask-heroku-deploy-1.onrender.com/register', {
+    const response = await fetch('https://observa-api.onrender.com/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

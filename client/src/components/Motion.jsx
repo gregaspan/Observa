@@ -17,7 +17,7 @@ const Motion = () => {
   };
 
   const fetchMotionImages = () => {
-    fetch(`https://flask-heroku-deploy-1.onrender.com/api/motion_images?user_id=${userId}`)
+    fetch(`https://observa-api.onrender.com/api/motion_images?user_id=${userId}`)
       .then(response => response.json())
       .then(data => {
         setImages(data);
@@ -36,7 +36,7 @@ const Motion = () => {
   };
 
   const handleSave = (id) => {
-    fetch(`https://flask-heroku-deploy-1.onrender.com/display_motion_image/${id}`)
+    fetch(`https://observa-api.onrender.com/display_motion_image/${id}`)
       .then(response => response.blob())
       .then(blob => {
         const a = document.createElement('a');
@@ -69,7 +69,7 @@ const Motion = () => {
   };
 
   const handleDelete = (id) => {
-    fetch(`https://flask-heroku-deploy-1.onrender.com/api/delete_motion_image`, {
+    fetch(`https://observa-api.onrender.com/api/delete_motion_image`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',

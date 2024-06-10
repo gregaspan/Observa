@@ -113,7 +113,7 @@ export default function Example() {
       try {
         const userId = JSON.parse(localStorage.getItem("user")).user_id;
         const response = await fetch(
-          `https://flask-heroku-deploy-1.onrender.com/api/cameras?user_id=${userId}`
+          `https://observa-api.onrender.com/api/cameras?user_id=${userId}`
         );
         const data = await response.json();
         const transformedData = data.map((item, index) => ({

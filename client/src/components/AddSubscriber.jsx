@@ -24,7 +24,7 @@ export default function ManageSubscribers() {
     event.preventDefault();
 
     const response = await fetch(
-      "https://flask-heroku-deploy-1.onrender.com/api/add_email_subscriber",
+      "https://observa-api.onrender.com/api/add_email_subscriber",
       {
         method: "POST",
         headers: {
@@ -61,7 +61,7 @@ export default function ManageSubscribers() {
     event.preventDefault();
 
     const response = await fetch(
-      "https://flask-heroku-deploy-1.onrender.com/api/add_phone_subscriber",
+      "https://observa-api.onrender.com/api/add_phone_subscriber",
       {
         method: "POST",
         headers: {
@@ -96,7 +96,7 @@ export default function ManageSubscribers() {
 
   const handleRemoveEmailSubscriber = async (subscriber) => {
     const response = await fetch(
-      "https://flask-heroku-deploy-1.onrender.com/api/remove_email_subscriber",
+      "https://observa-api.onrender.com/api/remove_email_subscriber",
       {
         method: "POST",
         headers: {
@@ -127,7 +127,7 @@ export default function ManageSubscribers() {
 
   const handleRemovePhoneSubscriber = async (subscriber) => {
     const response = await fetch(
-      "https://flask-heroku-deploy-1.onrender.com/api/remove_phone_subscriber",
+      "https://observa-api.onrender.com/api/remove_phone_subscriber",
       {
         method: "POST",
         headers: {
