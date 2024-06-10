@@ -2,16 +2,16 @@
 
 ![LandingPage-Mockup](https://github.com/gregaspan/Observa/assets/126577387/42e1203a-b01d-4c2f-8ded-e35d643fd04a)
 
-Observa web app is designed to use old/rejected Android phones as a video surveillance system. Our goal was to provide security to everyone without any hassle.
+Observa web app is designed to use old/rejected Android phones 📱 as a video surveillance system. Our goal is to provide security to everyone without any hassle 🔒.
 
-This file will serve as a project presentation, instructions for installing the application locally, using the application online, and documentation for the Observa application.
+This file will serve as a project presentation 📄, instructions for installing the application locally 🛠️, using the application online 🌐, and documentation for the Observa application 📚.
 
 ## 👥 Team Members
 - Gregor Špan
 - Gal Dvoršak 
 - Miha Čakš
 
-Get in touch - [Contact Us](https://gozenforms.com/3XcCLycZXs5N5HdMqZbC)
+Get in touch 👉 [Contact Us](https://gozenforms.com/3XcCLycZXs5N5HdMqZbC)
 
 ## 📑 Table of Contents
 
@@ -31,51 +31,51 @@ Get in touch - [Contact Us](https://gozenforms.com/3XcCLycZXs5N5HdMqZbC)
 
 ## 1. Overview
 
-**Detailed description of the project**
+🔍 **Detailed description of the project**
 
-The Observa Video Surveillance App is designed to provide comprehensive security monitoring with a user-friendly interface, allowing easy navigation through the feed. Whether you need to monitor your home, office, or any other property, Observa offers an array of advanced features to ensure your peace of mind.
+The Observa Video Surveillance App is designed to provide comprehensive security monitoring with a user-friendly interface, allowing easy navigation through the feed. Whether you need to monitor your home 🏠, office 🏢, or any other property, Observa offers an array of advanced features to ensure your peace of mind.
 
-Imagine you're away from home and your kids are home alone. With Observa, you can have everything under control and be calm, knowing you can monitor them in real-time. You can check live feeds to see that they're safe, receive instant notifications if any motion is detected, and even talk with our AI security specialist for any concerns.
+Imagine you're away from home and your kids are home alone. With Observa, you can have everything under control and be calm 😌, knowing you can monitor them in real-time. You can check live feeds to see that they're safe, receive instant notifications 📬 if any motion is detected, and even talk with our AI security specialist for any concerns.
 
 ## 2. Documentation
 
-Here is presented the entire process of working on this project and all the necessary tools and software that were used in the development.
+📂 Here is presented the entire process of working on this project and all the necessary tools and software that were used in the development.
 
 ### 🔧 Functionalities
 
-- **Remote Access** - Access the system via web app
-- **Live Observation** - Real-time video streaming for instant monitoring
-- **Multi-Device Support** - Connect and monitor multiple cameras simultaneously 
-- **Motion Detection** - Download and delete captured images
-- **Facial Recognition** - Download and delete captured images
-- **Video Playback** - View recorded videos stored in the database
-- **Email Notifications** - Receive notifications about detected motion via email
-- **SMS Notifications** - Receive notifications about detected motion via SMS
-- **Observa Chat** - Talk with our AI security specialist
-- **Reports** - Detailed reports generated from detected faces and motion events
+- **Remote Access** 🌐 - Access the system via web app
+- **Live Observation** 👀 - Real-time video streaming for instant monitoring
+- **Multi-Device Support** 📱💻 - Connect and monitor multiple cameras simultaneously 
+- **Motion Detection** 🚶‍♂️ - Download and delete captured images
+- **Facial Recognition** 😃 - Download and delete captured images
+- **Video Playback** 🎥 - View recorded videos stored in the database
+- **Email Notifications** 📧 - Receive notifications about detected motion via email
+- **SMS Notifications** 📲 - Receive notifications about detected motion via SMS
+- **Observa Chat** 💬 - Talk with our AI security specialist
+- **Reports** 📊 - Detailed reports generated from detected faces and motion events
 
 ### 🛠️ Technology Stack
 
-**Backend**: Python with Flask framework. NoSQL database MongoDB and Amazon S3 for video storage. API testing with Postman.  
-**Frontend**: React library using JavaScript.
+**Backend**: Python with Flask framework 🐍. NoSQL database MongoDB and Amazon S3 for video storage ☁️. API testing with Postman.  
+**Frontend**: React library using JavaScript 💻.
 
 ### 📅 Organisation and Method of Work
 
-During the execution of the project, we held two in-person meetings each week (Monday and Thursday). The purpose of these meetings was to present the progress made, exchange experiences, problem-solving, and assigning new tasks. For remote communication and collaboration, we utilized Discord.
+During the execution of the project, we held two in-person meetings each week (Monday and Thursday) 📆. The purpose of these meetings was to present the progress made, exchange experiences, problem-solving, and assigning new tasks. For remote communication and collaboration, we utilized Discord 🗣️.
 
 ![Sprint](https://github.com/gregaspan/Observa/assets/156235797/811eb9a6-e705-4497-a841-fbd811a88b35)
 
-We adopted the SCRUM methodology to manage our project work, structured around sprints. Each sprint lasted for one week, with the whole project consisting of 5 sprints, from 13.05.2024 to 10.06.2024. Before starting a new sprint, we created new tasks and set goals for the next sprint.
+We adopted the SCRUM methodology to manage our project work, structured around sprints 🏃‍♂️. Each sprint lasted for one week, with the whole project consisting of 5 sprints, from 13.05.2024 to 10.06.2024. Before starting a new sprint, we created new tasks and set goals for the next sprint.
 
-We also chose the principles of the Kanban method for managing the project work, tackling tasks with the highest priority first. New tasks were assigned at the end of each in-person meeting, ensuring continuous development. To track work and create new tasks, we used Trello, allowing us to review the work and use boards for better visibility.
+We also chose the principles of the Kanban method for managing the project work, tackling tasks with the highest priority first 📋. New tasks were assigned at the end of each in-person meeting, ensuring continuous development. To track work and create new tasks, we used Trello 📌, allowing us to review the work and use boards for better visibility.
 
 <img width="1440" alt="TrelloObserva" src="https://github.com/gregaspan/Observa/assets/156235797/a5611282-b35b-4486-9ef6-eff289eead34">
 
 ### 📂 Data Structure Design
 
-For storing videos, we used Amazon's S3 cloud-based service, allowing us to store up to 5GB of data for free, avoiding database overcrowding and maintaining better and faster performance.
+For storing videos, we used Amazon's S3 cloud-based service, allowing us to store up to 5GB of data for free, avoiding database overcrowding and maintaining better and faster performance ⚡.
 
-We used MongoDB to store data about users and images. Images are encoded using Base64 format for efficient storage and retrieval. We used four collections:
+We used MongoDB to store data about users and images. Images are encoded using Base64 format for efficient storage and retrieval 🗄️. We used four collections:
 
 - `detected_faces`: records the IP address of the camera, the time, the user ID, and the captured image.
 - `detected_motion`: records the camera IP address, time, user ID, and captured image.
@@ -86,7 +86,7 @@ We used MongoDB to store data about users and images. Images are encoded using B
 
 ### 🔍 Testing
 
-For testing, we used manual tests, performed continuously after each added functionality. This way, we addressed errors promptly and avoided major shortcomings that could have become difficult to manage over time.
+For testing, we used manual tests 🧪, performed continuously after each added functionality. This way, we addressed errors promptly and avoided major shortcomings that could have become difficult to manage over time.
 
 ## 3. Use of the Application
 
@@ -121,7 +121,7 @@ More wireframes: [Wireframes](https://gregaspan.notion.site/Observa-User-Guide-6
 - **Frontend (App)**: [Frontend](https://app-observa.onrender.com/)
 - **Backend**: [Backend](https://observa-api.onrender.com/)
 
-## 5. Shortcomings & Possible Improvements
+## 5. ⚠️ Shortcomings & Possible Improvements
 
 Our application has shown some areas where improvements are needed to enhance user experience and functionality. These include:
 
@@ -134,8 +134,10 @@ Our application has shown some areas where improvements are needed to enhance us
 
 Addressing these shortcomings will not only improve the user experience but also strengthen the reliability and security of our application, leading to higher user satisfaction and trust.
 
-## 6. Local Setup
+## 6. Local Setup 🛠️
 
 For a detailed guide on how to set up the project locally, please refer to our [Notion Documentation](https://gregaspan.notion.site/Local-Setup-Observa-4b83a746359241d8b0ddc2b7680bb0ed?pvs=4).
 
-You can also watch this [video tutorial](https://www.loom.com/share/9080241f495c495498f6d545997eb17b) on how to launch the project using the terminal.
+You can also watch this [video tutorial](https://www.loom.com/share/9080241f
+
+495c495498f6d545997eb17b) on how to launch the project using the terminal.
