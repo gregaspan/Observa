@@ -137,9 +137,9 @@ Settings
 
 ## 4. Links
 
-- **Landing Page**: [Landing Page URL](https://observa-lp.vercel.app/)
-- **Frontend (App)**: [Frontend URL] (https://app-observa.onrender.com/)
-- **Backend**: [Backend Repo URL] (https://observa-api.onrender.com/)
+- **Landing Page**: https://observa-lp.vercel.app/
+- **Frontend (App)**: https://app-observa.onrender.com/
+- **Backend**: https://observa-api.onrender.com/
 
 ## 5. Shortcomings & Possible Improvements
 
