@@ -1,4 +1,7 @@
-# Observa - Video Surveillance System
+# Observa - Video Surveillance System!
+
+[Observa-Logo-2](https://github.com/gregaspan/Observa/assets/156235797/3bd4cf8a-3e93-4435-8805-7fd29bae6389)
+
 
 ## Overview
 
