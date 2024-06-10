@@ -103,7 +103,7 @@ The User Guide is designed for new users to familiarize themselves with how the 
 - Observa Chat
 - Reports
 
-The categories contain a step-by-step guide that explains in detail what the user needs to do and what the conditions are for the action to be successful. The User Guide can be found here: [LINK TO PDF]
+The categories contain a step-by-step guide that explains in detail what the user needs to do and what the conditions are for the action to be successful. The User Guide can be found here: https://gregaspan.notion.site/Observa-User-Guide-62795490cad849138f18ddbffb571da4?pvs=4
 
 ### Final Look of the App
 
