@@ -6,12 +6,14 @@ Observa web app is designed to use old/rejected Android phones 📱 as a video s
 
 This file will serve as a project presentation 📄, instructions for installing the application locally 🛠️, using the application online 🌐, and documentation for the Observa application 📚.
 
+
 ## 👥 Team Members
 - Gregor Špan
 - Gal Dvoršak 
 - Miha Čakš
 
 Get in touch 👉 [Contact Us](https://gozenforms.com/3XcCLycZXs5N5HdMqZbC)
+
 
 ## 📑 Table of Contents
 
@@ -29,6 +31,7 @@ Get in touch 👉 [Contact Us](https://gozenforms.com/3XcCLycZXs5N5HdMqZbC)
 5. [Shortcomings & Possible Improvements](#5-shortcomings--possible-improvements)
 6. [Local Setup](#6-local-setup)
 
+
 ## 1. Overview
 
 🔍 **Detailed description of the project**
@@ -36,6 +39,7 @@ Get in touch 👉 [Contact Us](https://gozenforms.com/3XcCLycZXs5N5HdMqZbC)
 The Observa Video Surveillance App is designed to provide comprehensive security monitoring with a user-friendly interface, allowing easy navigation through the feed. Whether you need to monitor your home 🏠, office 🏢, or any other property, Observa offers an array of advanced features to ensure your peace of mind.
 
 Imagine you're away from home and your kids are home alone. With Observa, you can have everything under control and be calm 😌, knowing you can monitor them in real-time. You can check live feeds to see that they're safe, receive instant notifications 📬 if any motion is detected, and even talk with our AI security specialist for any concerns.
+
 
 ## 2. Documentation
 
@@ -84,9 +88,11 @@ We used MongoDB to store data about users and images. Images are encoded using B
 
 ![Observa Schema](https://github.com/gregaspan/Observa/assets/156235797/cda1fa55-5f2a-4ba9-9982-e450c071f0b3)
 
+
 ### 🔍 Testing
 
 For testing, we used manual tests 🧪, performed continuously after each added functionality. This way, we addressed errors promptly and avoided major shortcomings that could have become difficult to manage over time.
+
 
 ## 3. Use of the Application
 
@@ -113,13 +119,16 @@ The categories contain a step-by-step guide that explains in detail what the use
 
 <img width="1680" alt="Motion Detection1" src="https://github.com/gregaspan/Observa/assets/156235797/08c39170-0e9e-4094-a840-a8ac87cbd9eb">
 
+
 More wireframes: [Wireframes](https://gregaspan.notion.site/Observa-User-Guide-62795490cad849138f18ddbffb571da4?pvs=4)
+
 
 ## 4. Links 🔗
 
 - **Landing Page**: [Landing Page](https://observa-lp.vercel.app/)
 - **Frontend (App)**: [Frontend](https://app-observa.onrender.com/)
 - **Backend**: [Backend](https://observa-api.onrender.com/)
+
 
 ## 5. ⚠️ Shortcomings & Possible Improvements
 
@@ -133,6 +142,7 @@ Our application has shown some areas where improvements are needed to enhance us
 - **Security Concerns with High-Risk Data**: Implementing robust security measures is necessary to protect sensitive user information and maintain trust.
 
 Addressing these shortcomings will not only improve the user experience but also strengthen the reliability and security of our application, leading to higher user satisfaction and trust.
+
 
 ## 6. Local Setup 🛠️
 
