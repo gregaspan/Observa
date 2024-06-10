@@ -265,7 +265,9 @@ def generate_frames(user_id, camera_address):
             yield (b'--frame\r\n'
                    b'Content-Type: image/jpeg\r\n\r\n' + buffer.tobytes() + b'\r\n')
 
-
+@app.route('/')
+def home():
+    return "Welcome to Observa API"
 
 @app.route('/camera/<user_id>/<int:camera_id>')
 def index(user_id, camera_id):
