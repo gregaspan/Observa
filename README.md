@@ -65,11 +65,11 @@ Imagine you're away from home and your kids are home alone. With Observa, you ca
 
 ### 📅 Organisation and Method of Work
 
-During the execution of the project, we held two in-person meetings each week (Monday and Thursday) 📆. The purpose of these meetings was to present the progress made, exchange experiences, problem-solving, and assigning new tasks. For remote communication and collaboration, we utilized Discord 🗣️.
+During the execution of the project, we held two in-person meetings each week (Mondays and Thursdays) 📆. The purpose of these meetings was to present the progress made, exchange experiences, problem-solving, and assigning new tasks. For remote communication and collaboration, we utilized Discord 🗣️.
 
 ![Sprint](https://github.com/gregaspan/Observa/assets/156235797/811eb9a6-e705-4497-a841-fbd811a88b35)
 
-We adopted the SCRUM methodology to manage our project work, structured around sprints 🏃‍♂️. Each sprint lasted for one week, with the whole project consisting of 5 sprints, from 13.05.2024 to 10.06.2024. Before starting a new sprint, we created new tasks and set goals for the next sprint.
+We adopted the SCRUM methodology to manage our project work, structured around sprints 🏃‍♂️. Each sprint lasted for one week, with the whole project consisting of 5 sprints, from May 13, 2024 to June 13, 2024. Before starting a new sprint, we created new tasks and set goals for the next sprint.
 
 We also chose the principles of the Kanban method for managing the project work, tackling tasks with the highest priority first 📋. New tasks were assigned at the end of each in-person meeting, ensuring continuous development. To track work and create new tasks, we used Trello 📌, allowing us to review the work and use boards for better visibility.
 
