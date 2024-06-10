@@ -119,7 +119,13 @@ Live stream and Multicamera support
 
 Reports
 
+<img width="1680" alt="Motion Detection1" src="https://github.com/gregaspan/Observa/assets/156235797/08c39170-0e9e-4094-a840-a8ac87cbd9eb">
+
+
 Motion detection
+
+<img width="1680" alt="FacialRecognition1" src="https://github.com/gregaspan/Observa/assets/156235797/fb795b1e-7327-4261-9ea9-233c84a465f5">
+
 
 Facial recognition
 
