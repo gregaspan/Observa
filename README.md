@@ -1,6 +1,6 @@
 # Observa - Video Surveillance System
 
-![LogoObserva](https://github.com/gregaspan/Observa/assets/156235797/a415ce99-9aed-4b8d-b2a8-072a7a263867)
+![LandingPage-Mockup](https://github.com/gregaspan/Observa/assets/126577387/42e1203a-b01d-4c2f-8ded-e35d643fd04a)
 
 Observa web app is designed to use old/rejected android phones as a video surveillance system. Our goal was to provide security to everyone without any hassle.
 
@@ -107,7 +107,6 @@ The categories contain a step-by-step guide that explains in detail what the use
 
 ### Final Look of the App
 
-![LandingPage-Mockup](https://github.com/gregaspan/Observa/assets/126577387/42e1203a-b01d-4c2f-8ded-e35d643fd04a)
 
 ![1USE-THIS](https://github.com/gregaspan/Observa/assets/126577387/7529285b-3179-49bc-975d-fe8fb7d0ee6a)
 
