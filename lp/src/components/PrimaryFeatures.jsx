@@ -23,15 +23,15 @@ const features = [
     image: screenshotExpenses,
   },
   {
-    title: 'Cloud Storage & Night Vision',
+    title: 'Cloud Storage & Reports',
     description:
-      "Securely store your videos in the cloud and monitor your property even in the dark. Clear, reliable video, day or night.",
+      "Securely store your videos in the cloud and access detailed reports generated from detected faces and motion events. Stay informed with comprehensive statistics and insights.",
     image: screenshotVatReturns,
   },
   {
     title: 'Two-Way Communication & Multi-Camera Support',
     description:
-      'Talk through your cameras to scare off intruders or chat with family. Set up multiple cameras to cover every angle and keep every corner secure.',
+      'Consult our AI security expert. Strategically position cameras for full coverage, ensuring every corners safety.',
     image: screenshotReporting,
   },
 ]

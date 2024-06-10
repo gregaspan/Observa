@@ -44,9 +44,9 @@ const features = [
     },
   },
   {
-    name: 'Cloud Storage & Night Vision',
+    name: 'Cloud Storage & Reports',
     summary:
-      'Store your footage securely in the cloud and monitor your property day or night.',
+      "Cloud storage, reports on faces/motion, and insights keep you informed and secure.",
     description:
       'We mentioned cloud storage and night vision earlier, but its so important we had to bring it up again!',
     image: screenshotInventory,

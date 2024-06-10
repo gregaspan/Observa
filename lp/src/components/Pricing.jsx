@@ -105,43 +105,45 @@ export function Pricing() {
           <h2 className="font-display text-3xl tracking-tight text-white sm:text-4xl">
             <span className="relative whitespace-nowrap">
               <SwirlyDoodle className="absolute left-0 top-1/2 h-[1em] w-full fill-blue-400" />
-              <span className="relative">Simple pricing,</span>
+              <span className="relative">Discover your</span>
             </span>{' '}
-            for everyone.
+            plan now.
           </h2>
           <p className="mt-4 text-lg text-slate-400">
-            It doesn’t matter what size your business is, our software won’t
-            work well for you.
+            Our app suits all needs, big or small.
           </p>
         </div>
         <div className="flex flex-col items-center justify-center mt-16 space-y-10 lg:flex-row lg:space-y-0 lg:space-x-8">
           <Plan
             name="Basic"
             price="$0"
-            description="Good for anyone who is "
-            href="/register"
+            description=""
+            href=""
             features={[
               'Self-hosted solution',
-              'Connect up to 2 bank accounts',
-              'Track up to 15 expenses per month',
-              'Manual payroll support',
-              'Export up to 3 reports',
+              "Multi camera support",
+              "Motion Detection",
+              "Facial Recognition",
+              "Video Playback",
+              "Email + SMS notifications",
+              "Reports",
+              "Observa AI Chat",
             ]}
           />
           <Plan
             featured
             name="Premimum"
             price="$9"
-            description="Perfect for "
-            href="/register"
+            description="*price include VAT"
+            href=""
             features={[
               'Cloud-hosted solution',
               'No self-hosting required',
-              'Track up to 50 expenses per month',
-              'Automated payroll support',
-              'Export up to 12 reports',
-              'Bulk reconcile transactions',
-              'Track in multiple currencies',
+              "All functionalities from basic plan",
+              'Up to 1TB cloud storage',
+              "Multi device support", 
+              'Customer support available 24/7',
+
             ]}
           />
         </div>
