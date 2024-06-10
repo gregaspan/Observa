@@ -107,39 +107,13 @@ The categories contain a step-by-step guide that explains in detail what the use
 
 ### Final Look of the App
 
-![Multicamera Support](https://github.com/gregaspan/Observa/assets/156235797/386d42fa-2e54-44cd-9195-9e73e742a7cf)
+![LandingPage-Mockup](https://github.com/gregaspan/Observa/assets/126577387/42e1203a-b01d-4c2f-8ded-e35d643fd04a)
 
-Dashboard
-
-![Expenses](https://github.com/gregaspan/Observa/assets/156235797/c36b185a-c949-48a1-831a-ea1843c98c76)
-
-Live stream and Multicamera support
-
-![Inventory](https://github.com/gregaspan/Observa/assets/156235797/64b7aa07-ab54-422b-ab08-7466a8a39979)
-
-Reports
+![1USE-THIS](https://github.com/gregaspan/Observa/assets/126577387/7529285b-3179-49bc-975d-fe8fb7d0ee6a)
 
 <img width="1680" alt="Motion Detection1" src="https://github.com/gregaspan/Observa/assets/156235797/08c39170-0e9e-4094-a840-a8ac87cbd9eb">
 
-
-Motion detection
-
-<img width="1680" alt="FacialRecognition1" src="https://github.com/gregaspan/Observa/assets/156235797/fb795b1e-7327-4261-9ea9-233c84a465f5">
-
-
-Facial recognition
-
-<img width="1680" alt="Video Playback" src="https://github.com/gregaspan/Observa/assets/156235797/e390d88d-6b93-46da-916b-f68b68b21216">
-
-Video playback
-
-![Contacts](https://github.com/gregaspan/Observa/assets/156235797/bc1ffb35-ccae-44f8-9f4e-f975c15ce1ef)
-
-Observa chat
-
-![Profile](https://github.com/gregaspan/Observa/assets/156235797/bc61790d-d28e-48f8-8b75-666281fa5be5)
-
-Settings
+More wireframes: https://gregaspan.notion.site/Observa-User-Guide-62795490cad849138f18ddbffb571da4?pvs=4
 
 ## 4. Links
 
