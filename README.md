@@ -33,8 +33,7 @@ This file will serve as a project presentation, instructions for installing the 
    - Final look of the app
 5. Landing page
 6. Shortcomings & Possible improvements
-7. Presentation
-8. Local setup
+7. Local setup
 
 # 1. Overview
 **Detailed description of the project**
@@ -273,11 +272,6 @@ Our application has shown some areas where improvements are needed to enhance us
 
 Addressing these shortcomings will not only improve the user experience but also strengthen the reliability and security of our application, leading to higher user satisfaction and trust.
 
-# 7. Presentation
-
-You can find the presentation here: ==…………….……………………………………………………………………………………==
-
-
-# 8. Local Setup
+# 7. Local Setup
 
 
