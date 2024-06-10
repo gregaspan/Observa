@@ -138,6 +138,4 @@ Addressing these shortcomings will not only improve the user experience but also
 
 For a detailed guide on how to set up the project locally, please refer to our [Notion Documentation](https://gregaspan.notion.site/Local-Setup-Observa-4b83a746359241d8b0ddc2b7680bb0ed?pvs=4).
 
-You can also watch this [video tutorial](https://www.loom.com/share/9080241f
-
-495c495498f6d545997eb17b) on how to launch the project using the terminal.
+You can also watch this [video tutorial](https://www.loom.com/share/9080241f495c495498f6d545997eb17b) on how to launch the project using the terminal.
