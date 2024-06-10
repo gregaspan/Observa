@@ -37,7 +37,7 @@ const AccountSettings = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('https://observa-api.onrender.com/api/update_profile', {
+      const response = await fetch('http://127.0.0.1:6969/api/update_profile', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -67,7 +67,7 @@ const AccountSettings = () => {
     }
 
     try {
-      const response = await fetch('https://observa-api.onrender.com/api/change_password', {
+      const response = await fetch('http://127.0.0.1:6969/api/change_password', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -94,7 +94,7 @@ const AccountSettings = () => {
 
   const handleDeleteAccount = async () => {
     try {
-      const response = await fetch('https://observa-api.onrender.com/api/delete_account', {
+      const response = await fetch('http://127.0.0.1:6969/api/delete_account', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
