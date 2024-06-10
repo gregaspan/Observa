@@ -8,7 +8,7 @@ const ImageGallery = () => {
   const userId = user.user_id;
 
   useEffect(() => {
-    fetch(`http://127.0.0.1:6969/api/images?user_id=${userId}`)
+    fetch(`https://flask-heroku-deploy-1.onrender.com/api/images?user_id=${userId}`)
       .then(response => response.json())
       .then(data => {
         setImages(data);
@@ -32,7 +32,7 @@ const ImageGallery = () => {
   };
 
   const handleSave = (id) => {
-    fetch(`http://127.0.0.1:6969/display_image/${id}`)
+    fetch(`https://flask-heroku-deploy-1.onrender.com/display_image/${id}`)
       .then(response => response.blob())
       .then(blob => {
         const a = document.createElement('a');
@@ -65,7 +65,7 @@ const ImageGallery = () => {
   };
 
   const handleDelete = (id) => {
-    fetch(`http://127.0.0.1:6969/api/delete_face_image`, {
+    fetch(`https://flask-heroku-deploy-1.onrender.com/api/delete_face_image`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',

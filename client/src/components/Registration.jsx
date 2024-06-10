@@ -22,7 +22,7 @@ export default function RegistrationPage() {
       return;
     }
 
-    const response = await fetch('http://127.0.0.1:6969/register', {
+    const response = await fetch('https://flask-heroku-deploy-1.onrender.com/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

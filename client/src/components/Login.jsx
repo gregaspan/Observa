@@ -15,7 +15,7 @@ export default function LoginPage() {
     const email = data.get('email');
     const password = data.get('password');
 
-    const response = await fetch('http://127.0.0.1:6969/login', {
+    const response = await fetch('https://flask-heroku-deploy-1.onrender.com/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

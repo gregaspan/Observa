@@ -31,7 +31,7 @@ const ChatApp = () => {
         ...prevMessages,
         { type: "typing", text: "loading" },
       ]);
-      const res = await axios.post("http://127.0.0.1:6969/api/chat", {
+      const res = await axios.post("https://flask-heroku-deploy-1.onrender.com/api/chat", {
         question,
       });
 
