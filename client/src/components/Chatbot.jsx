@@ -31,7 +31,7 @@ const ChatApp = () => {
         ...prevMessages,
         { type: "typing", text: "loading" },
       ]);
-      const res = await axios.post("https://observa-api.onrender.com/api/chat", {
+      const res = await axios.post("http://127.0.0.1:6969/api/chat", {
         question,
       });
 
