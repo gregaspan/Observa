@@ -1,19 +1,19 @@
-# Observa - Video Surveillance System
+# Observa - Video Surveillance System 📹
 
 ![LandingPage-Mockup](https://github.com/gregaspan/Observa/assets/126577387/42e1203a-b01d-4c2f-8ded-e35d643fd04a)
 
-Observa web app is designed to use old/rejected android phones as a video surveillance system. Our goal was to provide security to everyone without any hassle.
+Observa web app is designed to use old/rejected Android phones as a video surveillance system. Our goal was to provide security to everyone without any hassle.
 
 This file will serve as a project presentation, instructions for installing the application locally, using the application online, and documentation for the Observa application.
 
-**Team members**
+## 👥 Team Members
 - Gregor Špan
 - Gal Dvoršak 
 - Miha Čakš
 
-Get in touch - https://gozenforms.com/3XcCLycZXs5N5HdMqZbC
+Get in touch - [Contact Us](https://gozenforms.com/3XcCLycZXs5N5HdMqZbC)
 
-## Table of Contents
+## 📑 Table of Contents
 
 1. [Overview](#1-overview)
 2. [Documentation](#2-documentation)
@@ -41,7 +41,7 @@ Imagine you're away from home and your kids are home alone. With Observa, you ca
 
 Here is presented the entire process of working on this project and all the necessary tools and software that were used in the development.
 
-### Functionalities
+### 🔧 Functionalities
 
 - **Remote Access** - Access the system via web app
 - **Live Observation** - Real-time video streaming for instant monitoring
@@ -54,12 +54,12 @@ Here is presented the entire process of working on this project and all the nece
 - **Observa Chat** - Talk with our AI security specialist
 - **Reports** - Detailed reports generated from detected faces and motion events
 
-### Technology Stack
+### 🛠️ Technology Stack
 
 **Backend**: Python with Flask framework. NoSQL database MongoDB and Amazon S3 for video storage. API testing with Postman.  
 **Frontend**: React library using JavaScript.
 
-### Organisation and Method of Work
+### 📅 Organisation and Method of Work
 
 During the execution of the project, we held two in-person meetings each week (Monday and Thursday). The purpose of these meetings was to present the progress made, exchange experiences, problem-solving, and assigning new tasks. For remote communication and collaboration, we utilized Discord.
 
@@ -71,7 +71,7 @@ We also chose the principles of the Kanban method for managing the project work,
 
 <img width="1440" alt="TrelloObserva" src="https://github.com/gregaspan/Observa/assets/156235797/a5611282-b35b-4486-9ef6-eff289eead34">
 
-### Data Structure Design
+### 📂 Data Structure Design
 
 For storing videos, we used Amazon's S3 cloud-based service, allowing us to store up to 5GB of data for free, avoiding database overcrowding and maintaining better and faster performance.
 
@@ -84,13 +84,13 @@ We used MongoDB to store data about users and images. Images are encoded using B
 
 ![Observa Schema](https://github.com/gregaspan/Observa/assets/156235797/cda1fa55-5f2a-4ba9-9982-e450c071f0b3)
 
-### Testing
+### 🔍 Testing
 
 For testing, we used manual tests, performed continuously after each added functionality. This way, we addressed errors promptly and avoided major shortcomings that could have become difficult to manage over time.
 
 ## 3. Use of the Application
 
-### User Guide
+### 📖 User Guide
 
 The User Guide is designed for new users to familiarize themselves with how the app works. It contains all the functionalities of the app that can be used by the user, in 10 categories:
 
@@ -105,22 +105,21 @@ The User Guide is designed for new users to familiarize themselves with how the 
 - Observa Chat
 - Reports
 
-The categories contain a step-by-step guide that explains in detail what the user needs to do and what the conditions are for the action to be successful. The User Guide can be found here: https://gregaspan.notion.site/Observa-User-Guide-62795490cad849138f18ddbffb571da4?pvs=4
+The categories contain a step-by-step guide that explains in detail what the user needs to do and what the conditions are for the action to be successful. The User Guide can be found here: [User Guide](https://gregaspan.notion.site/Observa-User-Guide-62795490cad849138f18ddbffb571da4?pvs=4)
 
-### Final Look of the App
-
+### 🎨 Final Look of the App
 
 ![1USE-THIS](https://github.com/gregaspan/Observa/assets/126577387/7529285b-3179-49bc-975d-fe8fb7d0ee6a)
 
 <img width="1680" alt="Motion Detection1" src="https://github.com/gregaspan/Observa/assets/156235797/08c39170-0e9e-4094-a840-a8ac87cbd9eb">
 
-More wireframes: https://gregaspan.notion.site/Observa-User-Guide-62795490cad849138f18ddbffb571da4?pvs=4
+More wireframes: [Wireframes](https://gregaspan.notion.site/Observa-User-Guide-62795490cad849138f18ddbffb571da4?pvs=4)
 
-## 4. Links
+## 4. Links 🔗
 
-- **Landing Page**: https://observa-lp.vercel.app/
-- **Frontend (App)**: https://app-observa.onrender.com/
-- **Backend**: https://observa-api.onrender.com/
+- **Landing Page**: [Landing Page](https://observa-lp.vercel.app/)
+- **Frontend (App)**: [Frontend](https://app-observa.onrender.com/)
+- **Backend**: [Backend](https://observa-api.onrender.com/)
 
 ## 5. Shortcomings & Possible Improvements
 
