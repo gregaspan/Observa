@@ -1,7 +1,3 @@
-Sure, here's the formatted README for your project:
-
----
-
 # Observa - Video Surveillance System
 
 ![LogoObserva](https://github.com/gregaspan/Observa/assets/156235797/a415ce99-9aed-4b8d-b2a8-072a7a263867)
@@ -24,15 +20,12 @@ This file will serve as a project presentation, instructions for installing the 
    - [Organisation and Method of Work](#organisation-and-method-of-work)
    - [Data Structure Design](#data-structure-design)
    - [Testing](#testing)
-3. [Installation Instructions](#3-installation-instructions)
-   - [Selfhosted Version](#selfhosted-version)
-   - [Paid Version](#paid-version)
-4. [Use of the Application](#4-use-of-the-application)
+3. [Use of the Application](#3-use-of-the-application)
    - [User Guide](#user-guide)
    - [Final Look of the App](#final-look-of-the-app)
-5. [Landing Page](#5-landing-page)
-6. [Shortcomings & Possible Improvements](#6-shortcomings--possible-improvements)
-7. [Local Setup](#7-local-setup)
+4. [Links](#4-links)
+5. [Shortcomings & Possible Improvements](#5-shortcomings--possible-improvements)
+6. [Local Setup](#6-local-setup)
 
 ## 1. Overview
 
@@ -93,95 +86,7 @@ We used MongoDB to store data about users and images. Images are encoded using B
 
 For testing, we used manual tests, performed continuously after each added functionality. This way, we addressed errors promptly and avoided major shortcomings that could have become difficult to manage over time.
 
-## 3. Installation Instructions
-
-### Selfhosted Version
-
-**You need to be connected to the same Wi-Fi network (Camera and Observa app)!**
-
-#### Android
-
-**1. Download and Install IP Webcam**
-
-Scan the QR code below to download IP Webcam. The download will start automatically.
-
-![ObservaQR 2](https://github.com/gregaspan/Observa/assets/156235797/e9206bba-12aa-45c0-91c7-17947baee7d8)
-
-**2. Open IP Webcam App**
-
-Open the IP Webcam app that you downloaded in the previous step.
-
-**3. Configure IP Webcam**
-
-Configure your desired settings (resolution, quality, etc.).
-
-**4. Start Server**
-
-Scroll to the bottom and tap on "Start server".
-
-**Observa App**
-
-**5. Go into Dashboard Tab**
-
-**6. Type Your Camera Name**
-
-Enter the name for your camera (we recommend that you name it after the room in which it is located).
-
-**7. Type Camera Address**
-
-Enter the IP address shown by the IP Webcam app (e.g., http://192.168.x.x:8080).
-
-**8. Click "Add Camera"**
-
-The camera will be added to the list. If you click on the selected camera, you should see the live stream from your Android device.
-
-**9. Remove Camera**
-
-Use the "Remove" button to delete the camera from the list.
-
-### Paid Version
-
-#### Android
-
-**1. Download and Install IP Webcam**
-
-Scan the QR code below to download IP Webcam. The download will start automatically.
-
-![ObservaQR 2](https://github.com/gregaspan/Observa/assets/156235797/e9206bba-12aa-45c0-91c7-17947baee7d8)
-
-**2. Open IP Webcam App**
-
-Open the IP Webcam app that you downloaded in the previous step.
-
-**3. Click Cloud Streaming Option**
-
-Click on the "Cloud streaming" option in the IP Webcam app.
-
-**4. Start Server**
-
-Scroll to the bottom and tap on "Start server".
-
-**Observa App**
-
-**5. Go into Dashboard Tab**
-
-**6. Type Your Camera Name**
-
-Enter the name for your camera (we recommend that you name it after the room in which it is located).
-
-**7. Type Camera Address**
-
-Enter the IP address shown by the IP Webcam app (e.g., http://192.168.x.x:8080).
-
-**8. Click "Add Camera"**
-
-The camera will be added to the list. If you click on the selected camera, you should see the live stream from your Android device.
-
-**9. Remove Camera**
-
-Use the "Remove" button to delete the camera from the list.
-
-## 4. Use of the Application
+## 3. Use of the Application
 
 ### User Guide
 
@@ -208,9 +113,7 @@ Dashboard
 
 ![Expenses](https://github.com/gregaspan/Observa/assets/156235797/c36b185a-c949-48a1-831a-ea1843c98c76)
 
-Live stream and Multicamera
-
- support
+Live stream and Multicamera support
 
 ![Inventory](https://github.com/gregaspan/Observa/assets/156235797/64b7aa07-ab54-422b-ab08-7466a8a39979)
 
@@ -232,11 +135,13 @@ Observa chat
 
 Settings
 
-## 5. Landing Page
+## 4. Links
 
-The landing page can be found here: [https://observa-lp.vercel.app/](https://observa-lp.vercel.app/)
+- **Landing Page**: [Landing Page URL](https://observa-lp.vercel.app/)
+- **Frontend (App)**: [Frontend URL] (https://app-observa.onrender.com/)
+- **Backend**: [Backend Repo URL] (https://observa-api.onrender.com/)
 
-## 6. Shortcomings & Possible Improvements
+## 5. Shortcomings & Possible Improvements
 
 Our application has shown some areas where improvements are needed to enhance user experience and functionality. These include:
 
@@ -249,10 +154,8 @@ Our application has shown some areas where improvements are needed to enhance us
 
 Addressing these shortcomings will not only improve the user experience but also strengthen the reliability and security of our application, leading to higher user satisfaction and trust.
 
-## 7. Local Setup
+## 6. Local Setup
 
-[Provide detailed instructions for setting up the application locally]
+For a detailed guide on how to set up the project locally, please refer to our [Notion Documentation](https://gregaspan.notion.site/Local-Setup-Observa-4b83a746359241d8b0ddc2b7680bb0ed?pvs=4).
 
----
-
-Feel free to paste this formatted content into your README file.
+You can also watch this [video tutorial](https://www.loom.com/share/9080241f495c495498f6d545997eb17b) on how to launch the project using the terminal.
