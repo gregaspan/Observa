@@ -14,7 +14,7 @@ export function Footer() {
             <div className="-my-1 flex justify-center gap-x-6">
               <NavLink href="#features">Features</NavLink>
               <NavLink href="#testimonials">Testimonials</NavLink>
-              <NavLink href="#pricing">Pricing</NavLink>
+              <NavLink href="https://app-observa.onrender.com/">Pricing</NavLink>
               <NavLink href="#faq">FAQ</NavLink>
             </div>
           </nav>

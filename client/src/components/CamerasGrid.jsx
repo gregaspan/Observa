@@ -42,7 +42,7 @@ const App = () => {
   const fetchCameras = async () => {
     try {
       const response = await axios.get(
-        "http://127.0.0.1:6969/api/cameras",
+        "https://observa-api.onrender.com/api/cameras",
         {
           params: { user_id: userId },
         }
@@ -58,7 +58,7 @@ const App = () => {
   const addCamera = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://127.0.0.1:6969/api/add_camera", {
+      await axios.post("https://observa-api.onrender.com/api/add_camera", {
         user_id: userId,
         name: newCameraName,
         address: newCameraAddress + "/video",
@@ -73,7 +73,7 @@ const App = () => {
 
   const removeCamera = async (address) => {
     try {
-      await axios.post("http://127.0.0.1:6969/api/remove_camera", {
+      await axios.post("https://observa-api.onrender.com/api/remove_camera", {
         user_id: userId,
         address,
       });
@@ -221,7 +221,7 @@ const App = () => {
               </button>
             </div>
             <img
-              src={`http://127.0.0.1:6969/camera/${userId}/${cameras.indexOf(
+              src={`https://observa-api.onrender.com/camera/${userId}/${cameras.indexOf(
                 selectedCamera
               )}`}
               alt={`${selectedCamera.name} Feed`}

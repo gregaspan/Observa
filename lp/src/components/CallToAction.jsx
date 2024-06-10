@@ -26,7 +26,7 @@ export function CallToAction() {
           <p className="mt-4 text-lg tracking-tight text-white">
           It's time to take control of your security. Set up Observa and turn your old smartphones into smart security cameras. Enjoy peace of mind and feel productive!
           </p>
-          <Button href="/register" color="white" className="mt-10">
+          <Button href="https://app-observa.onrender.com/" color="white" className="mt-10">
             Get 6 months free
           </Button>
         </div>
