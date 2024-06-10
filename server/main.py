@@ -16,10 +16,10 @@ from openai import OpenAI
 from s3_functions import upload_file, get_video_urls
 
 AIKEY = "zu-23f971dd13e55bf7d161d94a5d46840b"
-api_key = ''
-api_secret = ''
+api_key = 'f5251044b4d4e1ac73897a08925aeeb5'
+api_secret = '8692dfc44795ed0587316e6cd23f6fd3'
 from_email = 'observa564@gmail.com' #na safari je api - mailjet
-seven_io_api_key = ''
+seven_io_api_key = '7617631CdFed95fba66BC1836A7e378990464f4444a0e53c64B65BA762531b4b'
 
 
 UPLOAD_FOLDER = "uploads"
