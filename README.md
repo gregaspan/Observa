@@ -8,8 +8,10 @@ This file will serve as a project presentation, instructions for installing the 
 
 **Team members**
 - Gregor Špan
-- Gal Dvoršak
+- Gal Dvoršak 
 - Miha Čakš
+
+Get in touch - https://gozenforms.com/3XcCLycZXs5N5HdMqZbC
 
 ## Table of Contents
 
