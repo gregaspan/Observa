@@ -32,7 +32,9 @@ This file will serve as a project presentation, instructions for installing the 
    - User guide
    - Final look of the app
 5. Landing page
-6. Presentation
+6. Shortcomings & Possible improvements
+7. Presentation
+8. Local setup
 
 # 1. Overview
 **Detailed description of the project**
@@ -253,12 +255,29 @@ Settings
 
 Landing page can be found here: https://observa-lp.vercel.app/
 
+# 6. Shortcomings & Possible improvements
 
-# 6. Presentation
+Our application has shown some areas where improvements are needed to enhance user experience and functionality. These include:
+
+- Copy to Clipboard Functionality: The copy to clipboard feature needs optimization to ensure seamless copying of data across all devices and platforms.
+
+- Inconsistent Live Feed Loading Time: Users have reported variations in the loading time of live feeds, which need to be addressed for a smoother and more reliable experience.
+
+- Intermittent Camera Loading Issues: There have been instances where the camera fails to load properly. Resolving this issue is crucial for uninterrupted usage of camera-related features.
+
+- General Slow Loading Speed: The overall loading speed of the application needs improvement to enhance user satisfaction and efficiency, especially during peak usage times.
+
+- Video Loading Limit on Deployment: There seems to be a limitation on video loading during deployment. Adjustments are required to ensure seamless video playback without restrictions.
+
+- Security Concerns with High-Risk Data: Ensuring the security of high-risk data is paramount. Implementing robust security measures is necessary to protect sensitive user information and maintain trust.
+
+Addressing these shortcomings will not only improve the user experience but also strengthen the reliability and security of our application, leading to higher user satisfaction and trust.
+
+# 7. Presentation
 
 You can find the presentation here: ==…………….……………………………………………………………………………………==
 
 
-
+# 8. Local Setup
 
 
