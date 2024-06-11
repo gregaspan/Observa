@@ -132,9 +132,7 @@ We used MongoDB to store data about users and images. Images are encoded using B
 
 ![1USE-THIS](https://github.com/gregaspan/Observa/assets/126577387/7529285b-3179-49bc-975d-fe8fb7d0ee6a)
 
-<img width="1680" alt="Motion Detection1" src="https://github
-
-.com/gregaspan/Observa/assets/156235797/08c39170-0e9e-4094-a840-a8ac87cbd9eb">
+<img width="1680" alt="Motion Detection1" src="https://github.com/gregaspan/Observa/assets/156235797/08c39170-0e9e-4094-a840-a8ac87cbd9eb">
 
 
 More wireframes: [Wireframes](https://gregaspan.notion.site/Observa-User-Guide-62795490cad849138f18ddbffb571da4?pvs=4)
