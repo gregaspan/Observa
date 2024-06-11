@@ -100,3 +100,41 @@ Addressing these shortcomings will not only improve the user experience but also
 ## Contact
 
 Get in touch 👉 [Contact Us](https://gozenforms.com/3XcCLycZXs5N5HdMqZbC)
+
+## Additional Images and Diagrams
+
+### 📅 Organisation and Method of Work
+
+During the execution of the project, we held two in-person meetings each week (Mondays and Thursdays) 📆. The purpose of these meetings was to present the progress made, exchange experiences, problem-solving, and assigning new tasks. For remote communication and collaboration, we utilized Discord 🗣️.
+
+![Sprint](https://github.com/gregaspan/Observa/assets/156235797/811eb9a6-e705-4497-a841-fbd811a88b35)
+
+We adopted the SCRUM methodology to manage our project work, structured around sprints 🏃‍♂️. Each sprint lasted for one week, with the whole project consisting of 5 sprints, from May 13, 2024 to June 13, 2024. Before starting a new sprint, we created new tasks and set goals for the next sprint.
+
+We also chose the principles of the Kanban method for managing the project work, tackling tasks with the highest priority first 📋. New tasks were assigned at the end of each in-person meeting, ensuring continuous development. To track work and create new tasks, we used Trello 📌, allowing us to review the work and use boards for better visibility.
+
+<img width="1440" alt="TrelloObserva" src="https://github.com/gregaspan/Observa/assets/156235797/a5611282-b35b-4486-9ef6-eff289eead34">
+
+### 📂 Data Structure Design
+
+For storing videos, we used Amazon's S3 cloud-based service, allowing us to store up to 5GB of data for free, avoiding database overcrowding and maintaining better and faster performance ⚡.
+
+We used MongoDB to store data about users and images. Images are encoded using Base64 format for efficient storage and retrieval 🗄️. We used four collections:
+
+- `detected_faces`: records the IP address of the camera, the time, the user ID, and the captured image.
+- `detected_motion`: records the camera IP address, time, user ID, and captured image.
+- `recordings_collection`: records recorded videos.
+- `users`: records user name, email, password, profile picture, camera name, camera IP address, phone subscribers, and email subscribers.
+
+![Observa Schema](https://github.com/gregaspan/Observa/assets/156235797/cda1fa55-5f2a-4ba9-9982-e450c071f0b3)
+
+### 🎨 Final Look of the App
+
+![1USE-THIS](https://github.com/gregaspan/Observa/assets/126577387/7529285b-3179-49bc-975d-fe8fb7d0ee6a)
+
+<img width="1680" alt="Motion Detection1" src="https://github
+
+.com/gregaspan/Observa/assets/156235797/08c39170-0e9e-4094-a840-a8ac87cbd9eb">
+
+
+More wireframes: [Wireframes](https://gregaspan.notion.site/Observa-User-Guide-62795490cad849138f18ddbffb571da4?pvs=4)
